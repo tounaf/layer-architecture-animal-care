@@ -1,0 +1,25 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Configuration des couches principales
+    Domain\:
+        resource: '../src/Domain/'
+
+    Application\:
+        resource: '../src/Application/'
+
+    Application\RendezVous\Handler\:
+        resource: '../src/Application/RendezVous/Handler/'
+        tags: ['messenger.message_handler']
+
+    Infrastructure\:
+        resource: '../src/Infrastructure/'
+
+    UI\:
+        resource: '../src/UI/'
+
+    # Liaison Interface -> Implémentation
+    Application\Shared\Bus\EventBusInterface: '@Infrastructure\Messenger\SymfonyMessengerEventBus'
+    Domain\RendezVous\Repository\RendezVousRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineRendezVousRepository'

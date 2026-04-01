@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ name }} - {{ context }}{% endblock %}
+
+{% block body %}
+    <h1>{{ name }} ({{ context }})</h1>
+    <p>Ceci est le template généré pour le domaine {{ name }} dans le contexte {{ context }}.</p>
+{% endblock %}
