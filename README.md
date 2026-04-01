@@ -17,7 +17,7 @@ graph TD
     subgraph "COUCHE 3: INFRASTRUCTURE (Technique)"
         I1[Repositories Doctrine]
         I2[Messenger / Event Bus]
-        I3[Services Externes (Email, API)]
+        I3["Services Externes (Email, API)"]
     end
 
     subgraph "COUCHE 2: APPLICATION (Cas d'usage)"
