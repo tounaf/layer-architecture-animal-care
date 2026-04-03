@@ -99,6 +99,10 @@ Pour découpler les fonctionnalités (ex: envoyer un mail après une inscription
 Le projet utilise un système de menu découplé où chaque domaine s'enregistre via un `MenuProvider`.
 *Voir [docs/MENU.md](docs/MENU.md) pour plus de détails.*
 
+### 6. Topbar Dynamique (Slots & Priorités)
+Chaque domaine peut injecter des boutons, dropdowns ou liens dans le Topbar via des Slots (`left`, `right`, `user_menu`).
+*Voir [docs/TOPBAR.md](docs/TOPBAR.md) pour plus de détails.*
+
 ---
 
 ## 🚀 Installation & Développement

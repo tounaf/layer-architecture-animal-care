@@ -4,7 +4,7 @@
         <div class="d-flex align-items-center gap-2">
 
             <!-- Brand Logo -->
-            <a href="{{ path('admin_dashboard')|default('#') }}" class="logo">
+            <a href="{{ path('admin_dashboard') }}" class="logo">
                 <span class="logo-light">
                     <span class="logo-lg"><img src="{{ asset('admin-assets/images/logo.png') }}" alt="logo"></span>
                     <span class="logo-sm"><img src="{{ asset('admin-assets/images/logo-sm.png') }}" alt="small logo"></span>
@@ -26,59 +26,70 @@
                 <i class="ti ti-menu-deep fs-22"></i>
             </button>
 
-            <!-- Button Trigger Search Modal -->
-            <div class="topbar-search text-muted d-none d-xl-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#searchModal" type="button">
-                <i class="ti ti-search fs-18"></i>
-                <span class="me-2">Search something..</span>
-                <span class="ms-auto fw-medium">⌘K</span>
-            </div>
+            <!-- LEFT SLOT DYNAMIQUE -->
+            {% for item in topbar_registry.getItemsBySlot('left') %}
+                {% if item.hasTemplate() %}
+                    {% include item.template with item.templateData %}
+                {% else %}
+                    <div 
+                        {% for attr, val in item.attributes %} {{ attr }}="{{ val }}" {% endfor %}
+                        {% if item.routeName %} onclick="location.href='{{ path(item.routeName) }}'" style="cursor:pointer;" {% endif %}
+                    >
+                        {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                        <span class="me-2">{{ item.label }}</span>
+                        {% if '⌘K' in item.label or item.label == 'Search' %}<span class="ms-auto fw-medium">⌘K</span>{% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
 
         <div class="d-flex align-items-center gap-2">
 
-            <!-- Search for small devices -->
-            <div class="topbar-item d-flex d-xl-none">
-                <button class="topbar-link" data-bs-toggle="modal" data-bs-target="#searchModal" type="button">
-                    <i class="ti ti-search fs-22"></i>
-                </button>
-            </div>
+            <!-- RIGHT SLOT DYNAMIQUE -->
+            {% for item in topbar_registry.getItemsBySlot('right') %}
+                {% if item.hasTemplate() %}
+                    {% include item.template with item.templateData %}
+                {% else %}
+                    <div class="topbar-item">
+                        <button 
+                            {% for attr, val in item.attributes %} {{ attr }}="{{ val }}" {% endfor %}
+                            {% if item.routeName %} onclick="location.href='{{ path(item.routeName) }}'" {% endif %}
+                        >
+                            {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
 
-            <!-- Light/Dark Mode Button -->
-            <div class="topbar-item d-none d-sm-flex">
-                <button class="topbar-link" id="light-dark-mode" type="button">
-                    <i class="ti ti-moon fs-22"></i>
-                </button>
-            </div>
-
-            <!-- User Dropdown -->
+            <!-- User Dropdown (PARTIELLEMENT DYNAMIQUE) -->
             <div class="topbar-item nav-user">
                 <div class="dropdown">
                     <a class="topbar-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown" data-bs-offset="0,19" type="button" aria-haspopup="false" aria-expanded="false">
                         <img src="{{ asset('admin-assets/images/users/avatar-1.jpg') }}" width="32" class="rounded-circle me-lg-2 d-flex" alt="user-image">
                         <span class="d-lg-flex flex-column gap-1 d-none">
-                            <h5 class="my-0">Dhanoo K.</h5>
-                            <h6 class="my-0 fw-normal">Premium</h6>
+                            <h5 class="my-0">Utilisateur</h5>
+                            <h6 class="my-0 fw-normal">Admin</h6>
                         </span>
                         <i class="ti ti-chevron-down d-none d-lg-block align-middle ms-2"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <!-- item-->
                         <div class="dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Welcome !</h6>
+                            <h6 class="text-overflow m-0">Bienvenue !</h6>
                         </div>
 
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <i class="ti ti-user-hexagon me-1 fs-17 align-middle"></i>
-                            <span class="align-middle">My Account</span>
-                        </a>
+                        <!-- USER_MENU SLOT DYNAMIQUE -->
+                        {% for item in topbar_registry.getItemsBySlot('user_menu') %}
+                            <a href="{{ item.routeName ? path(item.routeName) : 'javascript:void(0);' }}" class="dropdown-item">
+                                {% if item.icon %}<i class="{{ item.icon }} me-1 fs-17 align-middle"></i>{% endif %}
+                                <span class="align-middle">{{ item.label }}</span>
+                            </a>
+                        {% endfor %}
 
                         <div class="dropdown-divider"></div>
 
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item active fw-semibold text-danger">
+                        <a href="#" class="dropdown-item active fw-semibold text-danger">
                             <i class="ti ti-logout me-1 fs-17 align-middle"></i>
-                            <span class="align-middle">Sign Out</span>
+                            <span class="align-middle">Déconnexion</span>
                         </a>
                     </div>
                 </div>
@@ -86,4 +97,3 @@
         </div>
     </div>
 </header>
-<!-- Topbar End -->
