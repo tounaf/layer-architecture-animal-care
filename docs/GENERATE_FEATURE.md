@@ -27,9 +27,10 @@ symfony console app:generate:feature Produit --admin -f -t
 Génère un contrôleur dans `src/UI/Http/Public/Controller/`.
 *   `--with-form` (-f) : Ajoute un formulaire Symfony.
 *   `--with-template` (-t) : Ajoute un template Twig dans `templates/public/`.
+*   `--menu` (-m) : Ajoute un provider de menu pour la sidebar.
 
 ```bash
-symfony console app:generate:feature Produit --public -f -t
+symfony console app:generate:feature Produit --public -f -t -m
 ```
 
 ### 3. API REST Contextuelle (`--rest=[context]`)
@@ -42,10 +43,15 @@ Génère un contrôleur JSON dans un sous-dossier de `src/UI/Http/Rest/`.
 ```bash
 # Exemple pour une API d'administration
 symfony console app:generate:feature Produit --rest=admin
-
-# Exemple pour une API mobile dédiée
-symfony console app:generate:feature Produit --rest=mobile
 ```
+
+### 4. Menu Dynamique (`--menu`)
+L'option `--menu` génère un `MenuProvider` dans la feature UI concernée. Ce provider enregistre automatiquement les liens de la feature dans la sidebar de l'administration.
+
+```bash
+symfony console app:generate:feature Facturation --admin --menu
+```
+*Voir [docs/MENU.md](docs/MENU.md) pour plus de détails.*
 
 ## Structure complète possible
 

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    {% include 'admin/partials/_head.html.twig' %}
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        {% include 'admin/partials/_topbar.html.twig' %}
+
+        {% include 'admin/partials/_sidebar.html.twig' %}
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+        <div class="page-content">
+            <div class="page-container">
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column">
+                            <div class="flex-grow-1">
+                                <h4 class="fs-18 fw-semibold m-0">{% block page_title %}Dashboard{% endblock %}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% block body %}{% endblock %}
+
+            </div> <!-- container -->
+
+            {% include 'admin/partials/_footer.html.twig' %}
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-transparent">
+                <div class="card mb-1">
+                    <div class="px-3 py-2 d-flex flex-row align-items-center" id="top-search">
+                        <i class="ti ti-search fs-22"></i>
+                        <input type="search" class="form-control border-0" id="search-modal-input" placeholder="Search for actions, people,">
+                        <button type="button" class="btn p-0" data-bs-dismiss="modal" aria-label="Close">[esc]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# On pourrait inclure le customizer ici si nécessaire #}
+
+    {% include 'admin/partials/_scripts.html.twig' %}
+    {% block javascripts %}{% endblock %}
+
+</body>
+
+</html>

@@ -1,8 +1,16 @@
-{% extends 'base.html.twig' %}
+{% extends '{{ layout }}' %}
 
 {% block title %}{{ name }} - {{ context }}{% endblock %}
 
+{% block page_title %}{{ name }} ({{ context }}){% endblock %}
+
 {% block body %}
-    <h1>{{ name }} ({{ context }})</h1>
-    <p>Ceci est le template généré pour le domaine {{ name }} dans le contexte {{ context }}.</p>
+    <div class="card">
+        <div class="card-header border-bottom border-dashed d-flex align-items-center">
+            <h4 class="header-title flex-grow-1">{{ name }}</h4>
+        </div>
+        <div class="card-body">
+            <p>Ceci est le template généré pour le domaine {{ name }} dans le contexte {{ context }}.</p>
+        </div>
+    </div>
 {% endblock %}

@@ -95,6 +95,10 @@ Pour découpler les fonctionnalités (ex: envoyer un mail après une inscription
 1.  L'entité enregistre l'événement (`$this->recordEvent(...)`).
 2.  Le Handler le récupère et le publie via l' `EventBus`.
 
+### 5. Menu Dynamique
+Le projet utilise un système de menu découplé où chaque domaine s'enregistre via un `MenuProvider`.
+*Voir [docs/MENU.md](docs/MENU.md) pour plus de détails.*
+
 ---
 
 ## 🚀 Installation & Développement

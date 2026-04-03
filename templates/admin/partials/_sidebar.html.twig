@@ -1,0 +1,66 @@
+<!-- Sidenav Menu Start -->
+<div class="sidenav-menu">
+
+    <!-- Brand Logo -->
+    <a href="{{ path('admin_dashboard') }}" class="logo">
+        <span class="logo-light">
+            <span class="logo-lg"><img src="{{ asset('admin-assets/images/logo.png') }}" alt="logo"></span>
+            <span class="logo-sm"><img src="{{ asset('admin-assets/images/logo-sm.png') }}" alt="small logo"></span>
+        </span>
+
+        <span class="logo-dark">
+            <span class="logo-lg"><img src="{{ asset('admin-assets/images/logo-dark.png') }}" alt="dark logo"></span>
+            <span class="logo-sm"><img src="{{ asset('admin-assets/images/logo-sm.png') }}" alt="small logo"></span>
+        </span>
+    </a>
+
+    <!-- Sidebar Hover Menu Toggle Button -->
+    <button class="button-sm-hover">
+        <i class="ti ti-circle align-middle"></i>
+    </button>
+
+    <!-- Full Sidebar Menu Close Button -->
+    <button class="button-close-fullsidebar">
+        <i class="ti ti-x align-middle"></i>
+    </button>
+
+    <div data-simplebar>
+
+        <!--- Sidenav Menu -->
+        <ul class="side-nav">
+            <li class="side-nav-title">Navigation</li>
+
+            {% for item in menu_registry.getItems() %}
+                <li class="side-nav-item">
+                    {% if item.hasChildren() %}
+                        {% set collapseId = 'sidebar' ~ loop.index %}
+                        <a data-bs-toggle="collapse" href="#{{ collapseId }}" aria-expanded="false" aria-controls="{{ collapseId }}" class="side-nav-link">
+                            <span class="menu-icon"><i class="{{ item.icon }}"></i></span>
+                            <span class="menu-text"> {{ item.label }} </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="{{ collapseId }}">
+                            <ul class="sub-menu">
+                                {% for child in item.children %}
+                                    <li class="side-nav-item">
+                                        <a href="{{ child.routeName ? path(child.routeName) : '#' }}" class="side-nav-link">
+                                            <span class="menu-text">{{ child.label }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ item.routeName ? path(item.routeName) : '#' }}" class="side-nav-link">
+                            <span class="menu-icon"><i class="{{ item.icon }}"></i></span>
+                            <span class="menu-text"> {{ item.label }} </span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- Sidenav Menu End -->

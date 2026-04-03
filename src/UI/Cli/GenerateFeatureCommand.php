@@ -32,7 +32,8 @@ class GenerateFeatureCommand extends Command
             ->addOption('public', 'p', InputOption::VALUE_NONE, 'Générer un contrôleur Public')
             ->addOption('rest', 'r', InputOption::VALUE_OPTIONAL, 'Générer un contrôleur REST (optionnel: admin, public, etc)')
             ->addOption('with-form', 'f', InputOption::VALUE_NONE, 'Générer un formulaire Symfony (si Admin ou Public)')
-            ->addOption('with-template', 't', InputOption::VALUE_NONE, 'Générer des templates Twig (si Admin ou Public)');
+            ->addOption('with-template', 't', InputOption::VALUE_NONE, 'Générer des templates Twig (si Admin ou Public)')
+            ->addOption('menu', 'm', InputOption::VALUE_NONE, 'Générer un MenuProvider pour la sidebar');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -64,6 +65,7 @@ class GenerateFeatureCommand extends Command
                 '{{ context_lower }}' => 'admin',
                 '{{ route }}' => '/admin/' . strtolower($name),
                 '{{ className }}' => "{$name}AdminController",
+                '{{ layout }}' => 'admin/layout.html.twig',
             ]);
             $files["src/UI/Http/Admin/Controller/{$name}AdminController.php"] = $this->render('ui/controller.tpl.php', $adminVars);
             if ($input->getOption('with-form')) {
@@ -71,6 +73,9 @@ class GenerateFeatureCommand extends Command
             }
             if ($input->getOption('with-template')) {
                 $files["templates/admin/" . strtolower($name) . "/index.html.twig"] = $this->render('ui/twig.tpl.html', $adminVars);
+            }
+            if ($input->getOption('menu')) {
+                $files["src/UI/Http/Admin/Menu/{$name}MenuProvider.php"] = $this->render('ui/menu_provider.tpl.php', $adminVars);
             }
         }
 
@@ -81,6 +86,7 @@ class GenerateFeatureCommand extends Command
                 '{{ context_lower }}' => 'public',
                 '{{ route }}' => '/' . strtolower($name),
                 '{{ className }}' => "{$name}Controller",
+                '{{ layout }}' => 'base.html.twig',
             ]);
             $files["src/UI/Http/Public/Controller/{$name}Controller.php"] = $this->render('ui/controller.tpl.php', $publicVars);
             if ($input->getOption('with-form')) {
@@ -88,6 +94,9 @@ class GenerateFeatureCommand extends Command
             }
             if ($input->getOption('with-template')) {
                 $files["templates/public/" . strtolower($name) . "/index.html.twig"] = $this->render('ui/twig.tpl.html', $publicVars);
+            }
+            if ($input->getOption('menu')) {
+                $files["src/UI/Http/Public/Menu/{$name}MenuProvider.php"] = $this->render('ui/menu_provider.tpl.php', $publicVars);
             }
         }
 
