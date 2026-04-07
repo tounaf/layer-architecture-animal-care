@@ -103,6 +103,12 @@ Le projet utilise un système de menu découplé où chaque domaine s'enregistre
 Chaque domaine peut injecter des boutons, dropdowns ou liens dans le Topbar via des Slots (`left`, `right`, `user_menu`).
 *Voir [docs/TOPBAR.md](docs/TOPBAR.md) pour plus de détails.*
 
+### 🔍 Débogage de l'Interface
+Pour visualiser tous les éléments enregistrés (Menu et Topbar), leurs priorités et leurs providers :
+```bash
+php bin/console app:debug:ui
+```
+
 ---
 
 ## 🚀 Installation & Développement

@@ -66,6 +66,13 @@ Le menu est rendu dynamiquement dans `templates/admin/partials/_sidebar.html.twi
 {% endfor %}
 ```
 
+## 🔍 Débogage
+
+Pour voir la liste complète des menus enregistrés et identifier quel provider a généré quel lien :
+```bash
+php bin/console app:debug:ui
+```
+
 ## 🔐 Sécurité
 
 Vous pouvez restreindre l'affichage d'un item de menu en passant des rôles au constructeur de `MenuItem` :

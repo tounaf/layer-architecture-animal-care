@@ -53,6 +53,12 @@ symfony console app:generate:feature Facturation --admin --menu
 ```
 *Voir [docs/MENU.md](docs/MENU.md) pour plus de détails.*
 
+### 5. Outil de Débogage UI
+Pour vérifier que vos éléments (Menu, Topbar) sont bien enregistrés et voir leurs priorités :
+```bash
+php bin/console app:debug:ui
+```
+
 ## Structure complète possible
 
 ```text

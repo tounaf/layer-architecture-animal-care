@@ -46,3 +46,10 @@ new TopbarItem(
 *   **`SLOT_LEFT`** : À côté du logo (généralement pour la recherche).
 *   **`SLOT_RIGHT`** : Zone des icônes à droite (Langues, Notifications, Thème).
 *   **`SLOT_USER_MENU`** : À l'intérieur du menu déroulant du profil utilisateur.
+
+## 🔍 Débogage
+
+Pour visualiser l'ordre d'affichage (priorités), les slots et les classes sources de chaque élément :
+```bash
+php bin/console app:debug:ui
+```
