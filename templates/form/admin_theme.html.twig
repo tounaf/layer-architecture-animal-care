@@ -1,0 +1,55 @@
+{% extends 'bootstrap_5_layout.html.twig' %}
+
+{# --- RANGÉE DE FORMULAIRE (ROW) --- #}
+{% block form_row -%}
+    {%- set row_attr = row_attr|merge({ class: row_attr.class|default('mb-3') }) -%}
+    <div{% with { attr: row_attr } %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row %}
+
+{# --- LABELS --- #}
+{% block form_label -%}
+    {%- if label is not same as(false) -%}
+        {%- set label_attr = label_attr|merge({ class: label_attr.class|default('form-label') }) -%}
+        {{- parent() -}}
+    {%- endif -%}
+{%- endblock form_label %}
+
+{# --- INPUTS --- #}
+{% block form_widget_simple -%}
+    {%- set attr = attr|merge({ class: attr.class|default('form-control') }) -%}
+    {{- parent() -}}
+{%- endblock form_widget_simple %}
+
+{# --- TEXTAREA --- #}
+{% block textarea_widget -%}
+    {%- set attr = attr|merge({ class: attr.class|default('form-control') }) -%}
+    {{- parent() -}}
+{%- endblock textarea_widget %}
+
+{# --- SELECTS --- #}
+{% block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({ class: attr.class|default('form-select') }) -%}
+    {{- parent() -}}
+{%- endblock choice_widget_collapsed %}
+
+{# --- CHECKBOXES / RADIOS --- #}
+{% block checkbox_widget -%}
+    {%- set attr = attr|merge({ class: attr.class|default('form-check-input') }) -%}
+    <div class="form-check">
+        {{- parent() -}}
+        <label class="form-check-label" for="{{ id }}">{{ label|default(name|humanize)|trans }}</label>
+    </div>
+{%- endblock checkbox_widget %}
+
+{% block radio_widget -%}
+    {%- set attr = attr|merge({ class: attr.class|default('form-check-input') }) -%}
+    <div class="form-check">
+        {{- parent() -}}
+        <label class="form-check-label" for="{{ id }}">{{ label|default(name|humanize)|trans }}</label>
+    </div>
+{%- endblock radio_widget %}
