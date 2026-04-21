@@ -4,15 +4,19 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Domain\Client\Entity\Client" table="client">
-        <id name="id" type="client_id" column="id">
+    <entity name="Domain\Service\Entity\Service" table="service">
+        <id name="id" type="service_id" column="id">
             <generator strategy="NONE"/>
         </id>
 
         <field name="nom" type="string"/>
-        <field name="prenom" type="string"/>
-        <field name="email" type="string" unique="true"/>
-        <field name="telephone" type="string" nullable="true"/>
+        <field name="description" type="text" nullable="true"/>
+        <field name="actif" type="boolean"/>
+
+        <!-- <embeddables> -->
+        <embedded name="tarifs" class="Domain\Service\Entity\Tarif" use-column-prefix="false"/>
+        <!-- </embeddables> -->
+        <!-- Note: Simplification for demo, normally Tarif would be a separate entity or collection of embeddables -->
     </entity>
 
 </doctrine-mapping>

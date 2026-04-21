@@ -33,31 +33,31 @@ doctrine:
             Care:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/config/doctrine'
+                dir: '%kernel.project_dir%/config/doctrine/care'
                 prefix: 'Domain\Care\Entity'
                 alias: Care
             RendezVous:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/config/doctrine'
+                dir: '%kernel.project_dir%/config/doctrine/rendez_vous'
                 prefix: 'Domain\RendezVous'
                 alias: RendezVous
             Animal:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/config/doctrine'
+                dir: '%kernel.project_dir%/config/doctrine/animal'
                 prefix: 'Domain\Animal\Entity'
                 alias: Animal
             Client:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/config/doctrine'
+                dir: '%kernel.project_dir%/config/doctrine/client'
                 prefix: 'Domain\Client\Entity'
                 alias: Client
             Service:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/config/doctrine'
+                dir: '%kernel.project_dir%/config/doctrine/service'
                 prefix: 'Domain\Service\Entity'
                 alias: Service
         controller_resolver:

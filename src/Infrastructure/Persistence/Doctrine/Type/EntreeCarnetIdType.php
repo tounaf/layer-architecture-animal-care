@@ -10,6 +10,14 @@ class EntreeCarnetIdType extends StringType
 {
     public const NAME = 'entree_carnet_id';
 
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?EntreeCarnetId
     {
         return $value !== null ? EntreeCarnetId::fromString($value) : null;

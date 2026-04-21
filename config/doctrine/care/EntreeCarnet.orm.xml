@@ -17,7 +17,7 @@
         <field name="dateEntree" type="datetime_immutable" column="date_entree"/>
         <field name="dateModification" type="datetime_immutable" column="date_modification"/>
         <field name="dateRappel" type="date_immutable" column="date_rappel" nullable="true"/>
-        <field name="donneesStructurees" type="json" column="donnees_structurees"/>
+        <field name="donneesStructurees" type="text" column="donnees_structurees"/>
 
         <many-to-one field="carnetSante" target-entity="Domain\Care\Entity\CarnetSante" inversed-by="entrees">
             <join-column name="carnet_sante_id" referenced-column-name="id" nullable="false"/>

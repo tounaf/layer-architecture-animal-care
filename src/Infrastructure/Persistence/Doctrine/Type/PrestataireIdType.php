@@ -10,6 +10,14 @@ class PrestataireIdType extends StringType
 {
     public const NAME = 'prestataire_id';
 
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?PrestataireId
     {
         return $value !== null ? PrestataireId::fromString($value) : null;

@@ -10,6 +10,14 @@ class RendezVousIdType extends StringType
 {
     public const NAME = 'rendez_vous_id';
 
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?RendezVousId
     {
         return $value !== null ? RendezVousId::fromString($value) : null;

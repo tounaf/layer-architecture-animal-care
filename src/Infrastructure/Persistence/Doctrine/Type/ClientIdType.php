@@ -10,6 +10,14 @@ class ClientIdType extends StringType
 {
     public const NAME = 'client_id';
 
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?ClientId
     {
         return $value !== null ? ClientId::fromString($value) : null;

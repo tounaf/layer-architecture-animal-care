@@ -11,7 +11,7 @@
 
         <field name="animalId" type="animal_id" column="animal_id"/>
         <field name="informationsGenerales" type="text" column="informations_generales" nullable="true"/>
-        <field name="metadonnees" type="json" column="metadonnees"/>
+        <field name="metadonnees" type="text" column="metadonnees"/>
         <field name="dateCreation" type="datetime_immutable" column="date_creation"/>
         <field name="dateDerniereMiseAJour" type="datetime_immutable" column="date_derniere_mise_a_jour"/>
 
