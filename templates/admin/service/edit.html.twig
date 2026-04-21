@@ -1,0 +1,46 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Modifier Service{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Modifier : {{ service.nom }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                        <div class="col-md-6">{{ form_row(form.code) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(form.categorieId) }}</div>
+                        <div class="col-md-6">{{ form_row(form.montantTarif) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">{{ form_row(form.description) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{ form_row(form.dureeDefaultMinutes) }}</div>
+                        <div class="col-md-4 pt-4">{{ form_row(form.necessiteAcompteDefault) }}</div>
+                        <div class="col-md-4 pt-4">{{ form_row(form.actif) }}</div>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                        <a href="{{ path('admin_service_index') }}" class="btn btn-link">Annuler</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

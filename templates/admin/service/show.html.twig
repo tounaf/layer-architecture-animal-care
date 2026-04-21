@@ -1,0 +1,71 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails du Service{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Service : {{ service.nom }}</h2>
+            </div>
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a href="{{ path('admin_service_edit', {id: service.id}) }}" class="btn btn-primary">
+                        Modifier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-body">
+                <div class="datagrid">
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Code</div>
+                        <div class="datagrid-content">{{ service.code }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Catégorie</div>
+                        <div class="datagrid-content">{{ service.categorie.nom }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Durée</div>
+                        <div class="datagrid-content">{{ service.dureeDefaultMinutes }} minutes</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Tarif actuel</div>
+                        <div class="datagrid-content">{{ service.tarif.montant }} {{ service.tarif.devise }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Acompte requis</div>
+                        <div class="datagrid-content">
+                            {% if service.isNecessiteAcompteDefault %}Oui{% else %}Non{% endif %}
+                        </div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Statut</div>
+                        <div class="datagrid-content">
+                            {% if service.isActif %}
+                                <span class="status status-green">Actif</span>
+                            {% else %}
+                                <span class="status status-red">Inactif</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="datagrid mt-4">
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Description</div>
+                        <div class="datagrid-content">{{ service.description|default('Aucune description') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

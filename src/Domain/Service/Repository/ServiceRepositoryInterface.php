@@ -9,4 +9,7 @@ interface ServiceRepositoryInterface
 {
     public function save(Service $service): void;
     public function findById(ServiceId $id): ?Service;
+    /** @return Service[] */
+    public function findAll(): array;
+    public function delete(Service $service): void;
 }

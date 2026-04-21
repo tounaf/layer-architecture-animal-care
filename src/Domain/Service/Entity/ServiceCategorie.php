@@ -32,6 +32,20 @@ class ServiceCategorie extends AggregateRoot
         );
     }
 
+    public function modifier(
+        string $nom,
+        ?string $description = null,
+        ?string $icone = null,
+        int $ordreAffichage = 0,
+        bool $actif = true
+    ): void {
+        $this->nom = $nom;
+        $this->description = $description;
+        $this->icone = $icone;
+        $this->ordreAffichage = $ordreAffichage;
+        $this->actif = $actif;
+    }
+
     public function getId(): ServiceCategorieId { return $this->id; }
     public function getNom(): string { return $this->nom; }
     public function getDescription(): ?string { return $this->description; }

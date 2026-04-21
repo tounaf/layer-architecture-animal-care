@@ -11,12 +11,12 @@ final class ServiceMenuProvider implements MenuProviderInterface
     {
         return [
             new MenuItem(
-                label: 'Service',
+                label: 'Catalogue',
                 icon: 'ti ti-box',
                 routeName: 'admin_service_index',
                 children: [
-                    new MenuItem('Liste', null, 'admin_service_index'),
-                    // new MenuItem('Nouveau', null, 'admin_service_new'),
+                    new MenuItem('Services', null, 'admin_service_index'),
+                    new MenuItem('Catégories', null, 'admin_service_categorie_index'),
                 ]
             ),
         ];

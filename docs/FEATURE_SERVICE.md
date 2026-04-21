@@ -21,24 +21,34 @@ Le tarif actuel est encapsulé dans le service.
 
 ---
 
-## 🔌 Couche Infrastructure
+## 🛠️ Couche Application (Cas d'Usage)
 
-### 1. Persistance
-*   **Repository** : `DoctrineServiceRepository`.
-*   **Mapping** : Configuration XML dans `config/doctrine/service/` pour `Service`, `ServiceCategorie` et `Tarif`.
-*   **Types DBAL** : `service_id` et `service_categorie_id` pour le mapping des Value Objects.
+La modification des données transite par des Commandes et des Handlers pour garantir l'intégrité métier.
 
-### 2. Données Initiales (Fixtures)
-Le catalogue complet est chargé via `ServiceFixtures` dans `src/Infrastructure/Persistence/Doctrine/Fixtures/`.
-Il comprend 8 catégories et 31 services pré-configurés.
+*   **Catégories** : `CreerServiceCategorieCommand`, `ModifierServiceCategorieCommand`.
+*   **Services** : `CreerServiceCommand`, `ModifierServiceCommand`.
 
 ---
 
-## 🖥️ Couche UI
+## 🔌 Couche Infrastructure
 
-*   **Controller** : `ServiceAdminController` (`/admin/service`).
-*   **Menu** : `ServiceMenuProvider`.
-*   **Template** : `templates/admin/service/index.html.twig`.
+### 1. Persistance
+*   **Repository** : `DoctrineServiceRepository` et `DoctrineServiceCategorieRepository`.
+*   **Mapping** : Configuration XML dans `config/doctrine/service/`.
+*   **Types DBAL** : `service_id` et `service_categorie_id`.
+
+### 2. Données Initiales (Fixtures)
+Le catalogue complet peut être chargé via `ServiceFixtures`.
+
+---
+
+## 🖥️ Couche UI (Administration)
+
+L'interface d'administration permet de gérer le catalogue via un CRUD complet.
+
+*   **Gestion des Catégories** : `/admin/service-categorie`
+*   **Gestion des Services** : `/admin/service`
+*   **Formulaires** : `ServiceCategorieType`, `ServiceType`.
 
 ---
 
@@ -47,4 +57,9 @@ Il comprend 8 catégories et 31 services pré-configurés.
 ### Charger le catalogue
 ```bash
 php bin/console doctrine:fixtures:load --append
+```
+
+### Vérifier l'enregistrement UI
+```bash
+php bin/console app:debug:ui
 ```

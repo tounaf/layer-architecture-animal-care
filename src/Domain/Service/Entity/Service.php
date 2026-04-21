@@ -41,6 +41,24 @@ class Service extends AggregateRoot
         );
     }
 
+    public function modifier(
+        string $nom,
+        string $code,
+        ServiceCategorie $categorie,
+        int $dureeDefaultMinutes = 30,
+        bool $necessiteAcompteDefault = true,
+        ?string $description = null,
+        bool $actif = true
+    ): void {
+        $this->nom = $nom;
+        $this->code = $code;
+        $this->categorie = $categorie;
+        $this->dureeDefaultMinutes = $dureeDefaultMinutes;
+        $this->necessiteAcompteDefault = $necessiteAcompteDefault;
+        $this->description = $description;
+        $this->actif = $actif;
+    }
+
     public function mettreAJourTarif(float $montant, string $devise = 'EUR'): void
     {
         $this->tarif = new Tarif($montant, $devise);

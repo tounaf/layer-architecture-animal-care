@@ -24,4 +24,15 @@ final class DoctrineServiceRepository implements ServiceRepositoryInterface
     {
         return $this->entityManager->find(Service::class, $id);
     }
+
+    public function findAll(): array
+    {
+        return $this->entityManager->getRepository(Service::class)->findAll();
+    }
+
+    public function delete(Service $service): void
+    {
+        $this->entityManager->remove($service);
+        $this->entityManager->flush();
+    }
 }

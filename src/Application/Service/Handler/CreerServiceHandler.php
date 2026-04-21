@@ -3,22 +3,40 @@
 namespace Application\Service\Handler;
 
 use Application\Service\Command\CreerServiceCommand;
-use Application\Shared\Bus\EventBusInterface;
 use Domain\Service\Entity\Service;
+use Domain\Service\Repository\ServiceCategorieRepositoryInterface;
 use Domain\Service\Repository\ServiceRepositoryInterface;
+use Domain\Service\ValueObject\ServiceCategorieId;
 
-final readonly class CreerServiceHandler
+final class CreerServiceHandler
 {
     public function __construct(
-        private ServiceRepositoryInterface $repository,
-        private EventBusInterface $eventBus
-    ) {}
+        private ServiceRepositoryInterface $serviceRepository,
+        private ServiceCategorieRepositoryInterface $categorieRepository
+    ) {
+    }
 
     public function __invoke(CreerServiceCommand $command): void
     {
-        $service = new Service($command->id);
-        $this->repository->save($service);
-        $this->eventBus->dispatchAll($service->getEvents());
-        $service->clearEvents();
+        $categorie = $this->categorieRepository->findById(ServiceCategorieId::fromString($command->categorieId));
+
+        if (!$categorie) {
+            throw new \InvalidArgumentException('Catégorie non trouvée');
+        }
+
+        $service = Service::creer(
+            $command->nom,
+            $command->code,
+            $categorie,
+            $command->dureeDefaultMinutes,
+            $command->necessiteAcompteDefault,
+            $command->description
+        );
+
+        if ($command->montantTarif > 0) {
+            $service->mettreAJourTarif($command->montantTarif);
+        }
+
+        $this->serviceRepository->save($service);
     }
 }
