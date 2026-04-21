@@ -10,13 +10,17 @@
         </id>
 
         <field name="nom" type="string"/>
+        <field name="code" type="string" length="50" unique="true"/>
         <field name="description" type="text" nullable="true"/>
+        <field name="dureeDefaultMinutes" type="integer" column="duree_default_minutes"/>
+        <field name="necessiteAcompteDefault" type="boolean" column="necessite_acompte_default"/>
         <field name="actif" type="boolean"/>
 
-        <!-- <embeddables> -->
-        <embedded name="tarifs" class="Domain\Service\Entity\Tarif" use-column-prefix="false"/>
-        <!-- </embeddables> -->
-        <!-- Note: Simplification for demo, normally Tarif would be a separate entity or collection of embeddables -->
+        <many-to-one field="categorie" target-entity="Domain\Service\Entity\ServiceCategorie">
+            <join-column name="categorie_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+
+        <embedded name="tarif" class="Domain\Service\Entity\Tarif" use-column-prefix="false"/>
     </entity>
 
 </doctrine-mapping>

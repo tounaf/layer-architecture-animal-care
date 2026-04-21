@@ -16,6 +16,7 @@ doctrine:
             rendez_vous_id: Infrastructure\Persistence\Doctrine\Type\RendezVousIdType
             client_id: Infrastructure\Persistence\Doctrine\Type\ClientIdType
             service_id: Infrastructure\Persistence\Doctrine\Type\ServiceIdType
+            service_categorie_id: Infrastructure\Persistence\Doctrine\Type\ServiceCategorieIdType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
