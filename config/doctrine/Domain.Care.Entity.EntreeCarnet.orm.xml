@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\Care\Entity\EntreeCarnet" table="entree_carnet">
+        <id name="id" type="entree_carnet_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="type" type="string" enum-type="Domain\Care\Enum\TypeEntree"/>
+        <field name="titre" type="string"/>
+        <field name="description" type="text"/>
+        <field name="etabliPar" type="prestataire_id" column="etabli_par_id"/>
+        <field name="visibleProprietaire" type="boolean" column="visible_proprietaire"/>
+        <field name="dateEntree" type="datetime_immutable" column="date_entree"/>
+        <field name="dateModification" type="datetime_immutable" column="date_modification"/>
+        <field name="dateRappel" type="date_immutable" column="date_rappel" nullable="true"/>
+        <field name="donneesStructurees" type="json" column="donnees_structurees"/>
+
+        <many-to-one field="carnetSante" target-entity="Domain\Care\Entity\CarnetSante" inversed-by="entrees">
+            <join-column name="carnet_sante_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\Animal\Entity\Animal" table="animal">
+        <id name="id" type="animal_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="nom" type="string"/>
+        <field name="espece" type="string" nullable="true"/>
+        <field name="race" type="string" nullable="true"/>
+        <field name="dateNaissance" type="date_immutable" column="date_naissance" nullable="true"/>
+        <field name="proprietaireId" type="client_id" column="proprietaire_id" nullable="true"/>
+    </entity>
+
+</doctrine-mapping>

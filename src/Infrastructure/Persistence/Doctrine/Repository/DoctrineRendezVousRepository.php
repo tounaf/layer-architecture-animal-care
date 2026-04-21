@@ -1,20 +1,27 @@
 <?php
-// src/Infrastructure/Persistence/Doctrine/Repository/DoctrineRendezVousRepository.php
+
 namespace Infrastructure\Persistence\Doctrine\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Domain\RendezVous\Entity\RendezVous;
 use Domain\RendezVous\Repository\RendezVousRepositoryInterface;
+use Domain\RendezVous\ValueObject\RendezVousId;
 
 final class DoctrineRendezVousRepository implements RendezVousRepositoryInterface
 {
-    public function getById(string $id): ?RendezVous
-    {
-        // Dummy implementation
-        return new RendezVous($id);
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    ) {
     }
 
     public function save(RendezVous $rendezVous): void
     {
-        // Dummy implementation (Doctrine persist/flush would go here)
+        $this->entityManager->persist($rendezVous);
+        $this->entityManager->flush();
+    }
+
+    public function findById(RendezVousId $id): ?RendezVous
+    {
+        return $this->entityManager->find(RendezVous::class, $id);
     }
 }

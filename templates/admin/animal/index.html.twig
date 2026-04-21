@@ -1,0 +1,25 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Gestion des Animaux{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h4 class="card-title">Liste des Animaux</h4>
+            <button class="btn btn-primary btn-sm">Ajouter un Animal</button>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Espèce</th>
+                        <th>Propriétaire</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

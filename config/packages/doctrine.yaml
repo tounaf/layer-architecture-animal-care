@@ -8,6 +8,14 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+        types:
+            carnet_sante_id: Infrastructure\Persistence\Doctrine\Type\CarnetSanteIdType
+            entree_carnet_id: Infrastructure\Persistence\Doctrine\Type\EntreeCarnetIdType
+            animal_id: Infrastructure\Persistence\Doctrine\Type\AnimalIdType
+            prestataire_id: Infrastructure\Persistence\Doctrine\Type\PrestataireIdType
+            rendez_vous_id: Infrastructure\Persistence\Doctrine\Type\RendezVousIdType
+            client_id: Infrastructure\Persistence\Doctrine\Type\ClientIdType
+            service_id: Infrastructure\Persistence\Doctrine\Type\ServiceIdType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -22,6 +30,36 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            Care:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Domain\Care\Entity'
+                alias: Care
+            RendezVous:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Domain\RendezVous'
+                alias: RendezVous
+            Animal:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Domain\Animal\Entity'
+                alias: Animal
+            Client:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Domain\Client\Entity'
+                alias: Client
+            Service:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Domain\Service\Entity'
+                alias: Service
         controller_resolver:
             auto_mapping: false
 

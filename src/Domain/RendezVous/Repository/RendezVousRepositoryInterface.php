@@ -1,11 +1,12 @@
 <?php
-// src/Domain/RendezVous/Repository/RendezVousRepositoryInterface.php
+
 namespace Domain\RendezVous\Repository;
 
 use Domain\RendezVous\Entity\RendezVous;
+use Domain\RendezVous\ValueObject\RendezVousId;
 
 interface RendezVousRepositoryInterface
 {
-    public function getById(string $id): ?RendezVous;
     public function save(RendezVous $rendezVous): void;
+    public function findById(RendezVousId $id): ?RendezVous;
 }

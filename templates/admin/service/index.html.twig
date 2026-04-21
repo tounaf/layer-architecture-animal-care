@@ -1,0 +1,25 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Catalogue des Services{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h4 class="card-title">Liste des Services</h4>
+            <button class="btn btn-primary btn-sm">Nouveau Service</button>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Description</th>
+                        <th>Tarif Actuel</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

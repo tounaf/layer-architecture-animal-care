@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <embeddable name="Domain\RendezVous\ValueObject\TimeRange">
+        <field name="debut" type="string" length="5" column="heure_debut"/>
+        <field name="fin" type="string" length="5" column="heure_fin"/>
+        <field name="dureeMinutes" type="integer" column="duree_minutes"/>
+    </embeddable>
+
+</doctrine-mapping>

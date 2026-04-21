@@ -1,30 +1,38 @@
 <?php
-// src/Application/RendezVous/Handler/ConfirmerRendezVousHandler.php
+
 namespace Application\RendezVous\Handler;
 
 use Application\RendezVous\Command\ConfirmerRendezVousCommand;
-use Application\Shared\Bus\EventBusInterface;
 use Domain\RendezVous\Repository\RendezVousRepositoryInterface;
+use Domain\RendezVous\ValueObject\RendezVousId;
+use Application\Shared\Bus\EventBusInterface;
 
-final readonly class ConfirmerRendezVousHandler
+class ConfirmerRendezVousHandler
 {
     public function __construct(
         private RendezVousRepositoryInterface $repository,
         private EventBusInterface $eventBus
-    ) {}
+    ) {
+    }
 
     public function __invoke(ConfirmerRendezVousCommand $command): void
     {
-        $rendezVous = $this->repository->getById($command->id);
+        $rendezVous = $this->repository->findById(
+            RendezVousId::fromString($command->rendezVousId)
+        );
 
         if (!$rendezVous) {
-            throw new \RuntimeException("Rendez-vous non trouvé.");
+            throw new \InvalidArgumentException('Rendez-vous non trouvé');
         }
 
         $rendezVous->confirmer();
+
         $this->repository->save($rendezVous);
 
-        $this->eventBus->dispatchAll($rendezVous->getEvents());
+        foreach ($rendezVous->getEvents() as $event) {
+            $this->eventBus->dispatch($event);
+        }
+
         $rendezVous->clearEvents();
     }
 }

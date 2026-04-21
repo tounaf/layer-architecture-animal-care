@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\Care\Entity\CarnetSante" table="carnet_sante" repository-class="Infrastructure\Persistence\Doctrine\Repository\DoctrineCarnetSanteRepository">
+        <id name="id" type="carnet_sante_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="animalId" type="animal_id" column="animal_id"/>
+        <field name="informationsGenerales" type="text" column="informations_generales" nullable="true"/>
+        <field name="metadonnees" type="json" column="metadonnees"/>
+        <field name="dateCreation" type="datetime_immutable" column="date_creation"/>
+        <field name="dateDerniereMiseAJour" type="datetime_immutable" column="date_derniere_mise_a_jour"/>
+
+        <one-to-many field="entrees" target-entity="Domain\Care\Entity\EntreeCarnet" mapped-by="carnetSante" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>
