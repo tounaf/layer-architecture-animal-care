@@ -5,12 +5,12 @@ namespace Application\Service\Command;
 final class ModifierServiceCategorieCommand
 {
     public function __construct(
-        public string $id,
-        public string $nom,
-        public ?string $description = null,
-        public ?string $icone = null,
-        public int $ordreAffichage = 0,
-        public bool $actif = true
+        public readonly string $id,
+        public readonly string $nom,
+        public readonly ?string $description = null,
+        public readonly ?string $icone = null,
+        public readonly int $ordreAffichage = 0,
+        public readonly bool $actif = true
     ) {
     }
 }

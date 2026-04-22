@@ -2,8 +2,14 @@
 
 namespace Application\Client\Command;
 
-final readonly class CreerClientCommand
+final class CreerClientCommand
 {
-    public function __construct(public string $id)
-    {}
+    public function __construct(
+        public readonly string $nom,
+        public readonly string $prenom,
+        public readonly string $email,
+        public readonly ?string $telephone = null,
+        public readonly ?string $ville = null
+    ) {
+    }
 }

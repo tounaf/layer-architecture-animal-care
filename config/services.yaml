@@ -23,5 +23,9 @@ services:
     # Liaison Interface -> Implémentation
     Application\Shared\Bus\EventBusInterface: '@Infrastructure\Messenger\SymfonyMessengerEventBus'
     Domain\RendezVous\Repository\RendezVousRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineRendezVousRepository'
+    Domain\Client\Repository\ClientRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineClientRepository'
+    Domain\Animal\Repository\AnimalRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineAnimalRepository'
+    Domain\Prestataire\Repository\PrestataireRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrinePrestataireRepository'
+    Domain\Prestataire\Repository\ServiceProposeRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceProposeRepository'
     Domain\Service\Repository\ServiceRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceRepository'
     Domain\Service\Repository\ServiceCategorieRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceCategorieRepository'

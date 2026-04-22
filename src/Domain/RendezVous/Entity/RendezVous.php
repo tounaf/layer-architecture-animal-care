@@ -7,6 +7,7 @@ use Domain\RendezVous\ValueObject\RendezVousId;
 use Domain\Shared\ValueObject\ClientId;
 use Domain\Shared\ValueObject\AnimalId;
 use Domain\Shared\ValueObject\PrestataireId;
+use Domain\Prestataire\ValueObject\ServiceProposeId;
 use Domain\RendezVous\ValueObject\TimeRange;
 use Domain\RendezVous\Enum\StatutRendezVous;
 use Domain\RendezVous\Event\RendezVousConfirme;
@@ -19,6 +20,8 @@ class RendezVous extends AggregateRoot
         private ClientId $clientId,
         private AnimalId $animalId,
         private PrestataireId $prestataireId,
+        private ServiceProposeId $serviceProposeId,
+        private \DateTimeInterface $dateRdv,
         private TimeRange $plageHoraire,
         private StatutRendezVous $statut,
         private ?string $commentaires = null
@@ -29,16 +32,12 @@ class RendezVous extends AggregateRoot
         ClientId $clientId,
         AnimalId $animalId,
         PrestataireId $prestataireId,
+        ServiceProposeId $serviceProposeId,
         \DateTimeInterface $dateRdv,
         string $heureDebut,
         int $dureeMinutes,
         ?string $commentaires = null
     ): self {
-        // Business logic for creation
-        if ($heureDebut < '08:00' || $heureDebut > '20:00') {
-            throw new \DomainException('Les rendez-vous sont possibles de 8h à 20h');
-        }
-
         $plageHoraire = new TimeRange($heureDebut, $dureeMinutes);
 
         return new self(
@@ -46,6 +45,8 @@ class RendezVous extends AggregateRoot
             $clientId,
             $animalId,
             $prestataireId,
+            $serviceProposeId,
+            $dateRdv,
             $plageHoraire,
             StatutRendezVous::EN_ATTENTE,
             $commentaires
@@ -85,5 +86,8 @@ class RendezVous extends AggregateRoot
     public function getClientId(): ClientId { return $this->clientId; }
     public function getAnimalId(): AnimalId { return $this->animalId; }
     public function getPrestataireId(): PrestataireId { return $this->prestataireId; }
+    public function getServiceProposeId(): ServiceProposeId { return $this->serviceProposeId; }
+    public function getDateRdv(): \DateTimeInterface { return $this->dateRdv; }
+    public function getPlageHoraire(): TimeRange { return $this->plageHoraire; }
     public function getStatut(): StatutRendezVous { return $this->statut; }
 }

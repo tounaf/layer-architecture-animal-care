@@ -13,6 +13,7 @@
         <field name="prenom" type="string"/>
         <field name="email" type="string" length="191" unique="true"/>
         <field name="telephone" type="string" nullable="true"/>
+        <field name="ville" type="string" nullable="true"/>
     </entity>
 
 </doctrine-mapping>

@@ -1,0 +1,93 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails du Prestataire{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">{{ prestataire.nomStructure }}</h2>
+            </div>
+            <div class="col-auto ms-auto">
+                <a href="{{ path('admin_prestataire_edit', {id: prestataire.id}) }}" class="btn btn-primary">Modifier</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="row row-cards">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="datagrid">
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Contact</div>
+                                <div class="datagrid-content">{{ prestataire.nomContact }} {{ prestataire.prenomContact }}</div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Profession</div>
+                                <div class="datagrid-content">{{ prestataire.profession }}</div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Statut</div>
+                                <div class="datagrid-content">
+                                    {% if prestataire.isValideParAdmin %}
+                                        <span class="status status-green">Validé</span>
+                                    {% else %}
+                                        <span class="status status-yellow">En attente</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Services proposés</h3>
+                        <div class="card-actions">
+                            <a href="{{ path('admin_prestataire_service_new', {id: prestataire.id}) }}" class="btn btn-primary btn-sm">Ajouter un service</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-vcenter card-table">
+                            <thead>
+                                <tr>
+                                    <th>Service ID</th>
+                                    <th>Description</th>
+                                    <th>Statut</th>
+                                    <th class="w-1"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for propose in servicesProposes %}
+                                    <tr>
+                                        <td>{{ propose.serviceId }}</td>
+                                        <td class="text-secondary">{{ propose.description }}</td>
+                                        <td>
+                                            {% if propose.isActif %}
+                                                <span class="badge bg-success">Actif</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Inactif</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('admin_prestataire_service_edit', {id: propose.id}) }}" class="btn btn-white btn-sm">Modifier</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr><td colspan="4" class="text-center">Aucun service proposé</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
