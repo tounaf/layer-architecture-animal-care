@@ -1,0 +1,67 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Prestataires{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Prestataires</h2>
+            </div>
+            <div class="col-auto ms-auto">
+                <a href="{{ path('admin_prestataire_new') }}" class="btn btn-primary">
+                    Nouveau Prestataire
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Structure</th>
+                            <th>Contact</th>
+                            <th>Profession</th>
+                            <th>Statut</th>
+                            <th class="w-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestataire in prestataires %}
+                            <tr>
+                                <td><a href="{{ path('admin_prestataire_show', {id: prestataire.id}) }}">{{ prestataire.nomStructure }}</a></td>
+                                <td>{{ prestataire.nomContact }} {{ prestataire.prenomContact }}</td>
+                                <td>{{ prestataire.profession }}</td>
+                                <td>
+                                    {% if prestataire.isValideParAdmin %}
+                                        <span class="badge bg-success">Validé</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">En attente</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="{{ path('admin_prestataire_edit', {id: prestataire.id}) }}" class="btn btn-white btn-sm">Modifier</a>
+                                        <form method="post" action="{{ path('admin_prestataire_delete', {id: prestataire.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ prestataire.id) }}">
+                                            <button class="btn btn-danger btn-sm">Supprimer</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center">Aucun prestataire trouvé</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

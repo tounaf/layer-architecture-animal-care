@@ -12,6 +12,8 @@
         <field name="clientId" type="client_id" column="client_id"/>
         <field name="animalId" type="animal_id" column="animal_id"/>
         <field name="prestataireId" type="prestataire_id" column="prestataire_id"/>
+        <field name="serviceProposeId" type="service_propose_id" column="service_propose_id"/>
+        <field name="dateRdv" type="date_immutable" column="date_rdv"/>
         <field name="statut" type="string" enum-type="Domain\RendezVous\Enum\StatutRendezVous"/>
         <field name="commentaires" type="text" nullable="true"/>
 

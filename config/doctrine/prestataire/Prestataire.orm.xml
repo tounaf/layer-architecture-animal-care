@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\Prestataire\Entity\Prestataire" table="prestataire">
+        <id name="id" type="prestataire_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="nomStructure" type="string" column="nom_structure"/>
+        <field name="nomContact" type="string" column="nom_contact"/>
+        <field name="prenomContact" type="string" column="prenom_contact"/>
+        <field name="profession" type="string"/>
+        <field name="valideParAdmin" type="boolean" column="valide_par_admin"/>
+    </entity>
+
+</doctrine-mapping>

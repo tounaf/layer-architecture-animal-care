@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails du Service Proposé{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Détails de l'offre</h2>
+            </div>
+            <div class="col-auto ms-auto">
+                <a href="{{ path('admin_prestataire_service_edit', {id: servicePropose.id}) }}" class="btn btn-primary">Modifier</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-body">
+                <div class="datagrid">
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Prestataire</div>
+                        <div class="datagrid-content">{{ prestataire.nomStructure }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Service catalogue</div>
+                        <div class="datagrid-content">{{ service.nom }} ({{ service.code }})</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Statut</div>
+                        <div class="datagrid-content">
+                            {% if servicePropose.isActif %}
+                                <span class="status status-green">Actif</span>
+                            {% else %}
+                                <span class="status status-red">Inactif</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="datagrid mt-4">
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Description personnalisée</div>
+                        <div class="datagrid-content">{{ servicePropose.description|default('Aucune description spécifique') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('admin_prestataire_show', {id: prestataire.id}) }}" class="btn btn-link">Retour au prestataire</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
