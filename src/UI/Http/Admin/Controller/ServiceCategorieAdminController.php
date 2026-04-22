@@ -56,6 +56,19 @@ class ServiceCategorieAdminController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/detail', name: 'show')]
+    public function show(string $id): Response
+    {
+        $categorie = $this->repository->findById(ServiceCategorieId::fromString($id));
+        if (!$categorie) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('admin/service_categorie/show.html.twig', [
+            'categorie' => $categorie
+        ]);
+    }
+
     #[Route('/{id}/modifier', name: 'edit')]
     public function edit(string $id, Request $request, ModifierServiceCategorieHandler $handler): Response
     {

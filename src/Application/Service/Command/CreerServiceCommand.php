@@ -5,13 +5,13 @@ namespace Application\Service\Command;
 final class CreerServiceCommand
 {
     public function __construct(
-        public string $nom,
-        public string $code,
-        public string $categorieId,
-        public int $dureeDefaultMinutes = 30,
-        public bool $necessiteAcompteDefault = true,
-        public ?string $description = null,
-        public float $montantTarif = 0
+        public readonly string $nom,
+        public readonly string $code,
+        public readonly string $categorieId,
+        public readonly int $dureeDefaultMinutes = 30,
+        public readonly bool $necessiteAcompteDefault = true,
+        public readonly ?string $description = null,
+        public readonly float $montantTarif = 0
     ) {
     }
 }

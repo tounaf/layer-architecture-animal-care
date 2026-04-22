@@ -14,13 +14,36 @@ class Animal extends AggregateRoot
         private ?string $espece = null,
         private ?string $race = null,
         private ?\DateTimeInterface $dateNaissance = null,
-        private ?ClientId $proprietaireId = null
+        private ?ClientId $proprietaireId = null,
+        private ?float $poids = null
     ) {
     }
 
-    public static function creer(string $nom, ?string $espece = null, ?ClientId $proprietaireId = null): self
-    {
-        return new self(AnimalId::generate(), $nom, $espece, null, null, $proprietaireId);
+    public static function creer(
+        string $nom,
+        ?string $espece = null,
+        ?string $race = null,
+        ?\DateTimeInterface $dateNaissance = null,
+        ?ClientId $proprietaireId = null,
+        ?float $poids = null
+    ): self {
+        return new self(AnimalId::generate(), $nom, $espece, $race, $dateNaissance, $proprietaireId, $poids);
+    }
+
+    public function modifier(
+        string $nom,
+        ?string $espece = null,
+        ?string $race = null,
+        ?\DateTimeInterface $dateNaissance = null,
+        ?ClientId $proprietaireId = null,
+        ?float $poids = null
+    ): void {
+        $this->nom = $nom;
+        $this->espece = $espece;
+        $this->race = $race;
+        $this->dateNaissance = $dateNaissance;
+        $this->proprietaireId = $proprietaireId;
+        $this->poids = $poids;
     }
 
     public function getId(): AnimalId { return $this->id; }
@@ -29,4 +52,5 @@ class Animal extends AggregateRoot
     public function getRace(): ?string { return $this->race; }
     public function getDateNaissance(): ?\DateTimeInterface { return $this->dateNaissance; }
     public function getProprietaireId(): ?ClientId { return $this->proprietaireId; }
+    public function getPoids(): ?float { return $this->poids; }
 }

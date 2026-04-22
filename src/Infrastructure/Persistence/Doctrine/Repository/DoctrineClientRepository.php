@@ -24,4 +24,15 @@ final class DoctrineClientRepository implements ClientRepositoryInterface
     {
         return $this->entityManager->find(Client::class, $id);
     }
+
+    public function findAll(): array
+    {
+        return $this->entityManager->getRepository(Client::class)->findAll();
+    }
+
+    public function delete(Client $client): void
+    {
+        $this->entityManager->remove($client);
+        $this->entityManager->flush();
+    }
 }

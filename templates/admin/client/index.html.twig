@@ -1,25 +1,60 @@
 {% extends 'admin/layout.html.twig' %}
+
 {% block title %}Gestion des Clients{% endblock %}
+
 {% block body %}
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between">
-            <h4 class="card-title">Liste des Clients</h4>
-            <button class="btn btn-primary btn-sm">Nouveau Client</button>
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Clients</h2>
+            </div>
+            <div class="col-auto ms-auto">
+                <a href="{{ path('admin_client_new') }}" class="btn btn-primary">
+                    Nouveau Client
+                </a>
+            </div>
         </div>
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Nb Animaux</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Ville</th>
+                            <th class="w-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                            <tr>
+                                <td>{{ client.nom }} {{ client.prenom }}</td>
+                                <td>{{ client.email }}</td>
+                                <td>{{ client.telephone }}</td>
+                                <td>{{ client.ville }}</td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        <a href="{{ path('admin_client_edit', {id: client.id}) }}" class="btn btn-white btn-sm">Modifier</a>
+                                        <form method="post" action="{{ path('admin_client_delete', {id: client.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ client.id) }}">
+                                            <button class="btn btn-danger btn-sm">Supprimer</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center">Aucun client trouvé</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

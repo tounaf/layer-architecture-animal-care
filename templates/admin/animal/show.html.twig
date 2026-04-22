@@ -1,0 +1,45 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails de l'Animal{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">{{ animal.nom }}</h2>
+            </div>
+            <div class="col-auto ms-auto">
+                <a href="{{ path('admin_animal_edit', {id: animal.id}) }}" class="btn btn-primary">Modifier</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-body">
+                <div class="datagrid">
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Espèce / Race</div>
+                        <div class="datagrid-content">{{ animal.espece }} / {{ animal.race }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Date de Naissance</div>
+                        <div class="datagrid-content">{{ animal.dateNaissance ? animal.dateNaissance|date('d/m/Y') : '-' }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Poids</div>
+                        <div class="datagrid-content">{{ animal.poids }} kg</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Propriétaire ID</div>
+                        <div class="datagrid-content">{{ animal.proprietaireId }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
