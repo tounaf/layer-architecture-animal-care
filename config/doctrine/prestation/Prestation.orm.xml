@@ -14,6 +14,12 @@
         <field name="dateRealisation" type="datetime_immutable" column="date_realisation"/>
         <field name="coutTotal" type="float" column="cout_total"/>
         <field name="statut" type="string"/>
+
+        <one-to-many field="valeursChamps" target-entity="Domain\Prestation\Entity\PrestationValeurChamp" mapped-by="prestationId">
+             <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
     </entity>
 
 </doctrine-mapping>
