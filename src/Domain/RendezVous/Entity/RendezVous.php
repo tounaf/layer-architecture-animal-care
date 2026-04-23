@@ -38,6 +38,10 @@ class RendezVous extends AggregateRoot
         int $dureeMinutes,
         ?string $commentaires = null
     ): self {
+        if ($heureDebut < '08:00' || $heureDebut > '20:00') {
+            throw new \DomainException('Les rendez-vous sont possibles de 8h à 20h');
+        }
+
         $plageHoraire = new TimeRange($heureDebut, $dureeMinutes);
 
         return new self(
