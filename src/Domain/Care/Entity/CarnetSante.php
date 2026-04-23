@@ -21,15 +21,20 @@ class CarnetSante extends AggregateRoot
         private CarnetSanteId $id,
         private AnimalId $animalId,
         private string $informationsGenerales = '',
-        private array $metadonnees = []
+        private array $metadonnees = [],
+        ?\DateTimeImmutable $dateCreation = null
     ) {
-        $this->dateCreation = new \DateTimeImmutable();
+        $this->dateCreation = $dateCreation ?? new \DateTimeImmutable();
         $this->dateDerniereMiseAJour = new \DateTimeImmutable();
     }
 
-    public static function creer(AnimalId $animalId): self
-    {
-        return new self(CarnetSanteId::generate(), $animalId);
+    public static function creer(
+        AnimalId $animalId,
+        string $informationsGenerales = '',
+        array $metadonnees = [],
+        ?\DateTimeImmutable $dateCreation = null
+    ): self {
+        return new self(CarnetSanteId::generate(), $animalId, $informationsGenerales, $metadonnees, $dateCreation);
     }
 
     public function ajouterEntree(
@@ -65,18 +70,18 @@ class CarnetSante extends AggregateRoot
         ));
     }
 
-    public function getId(): CarnetSanteId
-    {
-        return $this->id;
-    }
+    public function getId(): CarnetSanteId { return $this->id; }
+    public function getAnimalId(): AnimalId { return $this->animalId; }
+    public function getEntrees(): array { return $this->entrees; }
+    public function getDateCreation(): \DateTimeImmutable { return $this->dateCreation; }
+    public function getInformationsGenerales(): string { return $this->informationsGenerales; }
+    public function getMetadonnees(): array { return $this->metadonnees; }
+    public function getDateDerniereMiseAJour(): \DateTimeImmutable { return $this->dateDerniereMiseAJour; }
 
-    public function getAnimalId(): AnimalId
+    public function mettreAJourInformations(string $info, array $meta = []): void
     {
-        return $this->animalId;
-    }
-
-    public function getEntrees(): array
-    {
-        return $this->entrees;
+        $this->informationsGenerales = $info;
+        $this->metadonnees = array_merge($this->metadonnees, $meta);
+        $this->dateDerniereMiseAJour = new \DateTimeImmutable();
     }
 }

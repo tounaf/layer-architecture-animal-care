@@ -2,10 +2,15 @@
 
 namespace Domain\Care\Repository;
 
-use Domain\Care\Entity\Care;
+use Domain\Care\Entity\CarnetSante;
+use Domain\Care\ValueObject\CarnetSanteId;
+use Domain\Shared\ValueObject\AnimalId;
 
-interface CareRepositoryInterface
+interface CarnetSanteRepositoryInterface
 {
-    public function getById(string $id): ?Care;
-    public function save(Care $care): void;
+    public function save(CarnetSante $carnetSante): void;
+    public function findById(CarnetSanteId $id): ?CarnetSante;
+    public function findByAnimal(AnimalId $animalId): ?CarnetSante;
+    /** @return CarnetSante[] */
+    public function findAll(): array;
 }

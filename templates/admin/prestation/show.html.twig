@@ -1,0 +1,38 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Détails de la Prestation{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Prestation du {{ prestation.dateRealisation|date('d/m/Y') }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-body">
+                <div class="datagrid">
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Service effectué</div>
+                        <div class="datagrid-content">{{ service.nom }}</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Coût total</div>
+                        <div class="datagrid-content">{{ prestation.coutTotal }} EUR</div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Statut</div>
+                        <div class="datagrid-content"><span class="status status-green">{{ prestation.statut }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
