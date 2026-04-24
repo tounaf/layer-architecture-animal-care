@@ -21,16 +21,54 @@ Gère les fichiers uploadés (ordonnances, analyses, photos) liés aux prestatio
 
 ---
 
-## 🛠️ Couche Application
+## 🔄 Flow de Validation
 
-*   **Commande** : `RealiserPrestationCommand`.
-*   **Handler** : `RealiserPrestationHandler`.
-    *   **Flow** :
-        1. Enregistre la prestation.
-        2. Traite les valeurs des champs dynamiques.
-        3. Gère l'upload et la persistance des documents si nécessaire.
-        4. Crée ou met à jour le **Carnet de Santé** de l'animal.
-        5. Ajoute une entrée historique dans le carnet de santé.
+Le processus de validation d'une prestation est une orchestration complexe entre plusieurs domaines. Voici le diagramme de séquence représentant le flow :
+
+```mermaid
+sequenceDiagram
+    participant UI as PrestationAdminController
+    participant Application as RealiserPrestationHandler
+    participant Prestation as Prestation (Domain)
+    participant Care as CarnetSante (Domain)
+    participant Infra as Infrastructure (DB / Files)
+
+    UI->>UI: Saisie du coût et des champs dynamiques
+    UI->>Infra: Upload des fichiers via FileUploader
+    UI->>Application: Dispatch RealiserPrestationCommand
+
+    activate Application
+    Application->>Infra: findById(RendezVousId)
+    Application->>Prestation: creer(rdvId, serviceProposeId, ...)
+
+    loop Pour chaque champ dynamique
+        Application->>Infra: Créer Document (si fichier)
+        Application->>Prestation: ajouterValeurChamp(champId, valeur, ...)
+    end
+
+    Application->>Infra: save(Prestation)
+
+    Application->>Infra: findByAnimal(AnimalId)
+    alt Carnet inexistant
+        Application->>Care: creer(AnimalId)
+    end
+
+    Application->>Care: ajouterEntree(CONSULTATION, "Prestation réalisée", ...)
+    Application->>Infra: save(CarnetSante)
+
+    deactivate Application
+
+    Application-->>UI: Succès (Redirect Index)
+```
+
+### Étapes détaillées :
+1.  **Saisie (UI)** : L'utilisateur remplit le formulaire de validation généré dynamiquement à partir des `ServiceChamp` configurés.
+2.  **Traitement des fichiers** : Le contrôleur utilise le `FileUploader` pour stocker les fichiers sur le disque avant d'envoyer la commande.
+3.  **Exécution (Handler)** :
+    *   Le rendez-vous est identifié.
+    *   L'agrégat `Prestation` est instancié avec ses valeurs dynamiques.
+    *   Si des documents sont présents, ils sont enregistrés dans le domaine `Document`.
+4.  **Mise à jour Médicale** : Le handler récupère ou initialise le `CarnetSante` de l'animal pour y consigner l'acte.
 
 ---
 

@@ -5,6 +5,7 @@ namespace Domain\Animal\Entity;
 use Domain\Shared\Entity\AggregateRoot;
 use Domain\Shared\ValueObject\AnimalId;
 use Domain\Shared\ValueObject\ClientId;
+use Domain\Animal\Event\AnimalCree;
 
 class Animal extends AggregateRoot
 {
@@ -27,7 +28,10 @@ class Animal extends AggregateRoot
         ?ClientId $proprietaireId = null,
         ?float $poids = null
     ): self {
-        return new self(AnimalId::generate(), $nom, $espece, $race, $dateNaissance, $proprietaireId, $poids);
+        $animal = new self(AnimalId::generate(), $nom, $espece, $race, $dateNaissance, $proprietaireId, $poids);
+        $animal->recordEvent(new AnimalCree($animal->id));
+
+        return $animal;
     }
 
     public function modifier(

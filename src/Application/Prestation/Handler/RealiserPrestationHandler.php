@@ -14,6 +14,7 @@ use Domain\Care\Repository\CarnetSanteRepositoryInterface;
 use Domain\Care\Enum\TypeEntree;
 use Domain\Document\Entity\Document;
 use Domain\Document\Repository\DocumentRepositoryInterface;
+use Application\Shared\Bus\EventBusInterface;
 
 final class RealiserPrestationHandler
 {
@@ -21,7 +22,8 @@ final class RealiserPrestationHandler
         private PrestationRepositoryInterface $prestationRepository,
         private RendezVousRepositoryInterface $rendezVousRepository,
         private CarnetSanteRepositoryInterface $carnetSanteRepository,
-        private DocumentRepositoryInterface $documentRepository
+        private DocumentRepositoryInterface $documentRepository,
+        private EventBusInterface $eventBus
     ) {
     }
 
@@ -85,5 +87,11 @@ final class RealiserPrestationHandler
         );
 
         $this->carnetSanteRepository->save($carnet);
+
+        // Dispatch events (ex: EntreeAjoutee)
+        foreach ($carnet->getEvents() as $event) {
+            $this->eventBus->dispatch($event);
+        }
+        $carnet->clearEvents();
     }
 }

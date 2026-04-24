@@ -68,16 +68,28 @@ class PrestationAdminController extends AbstractController
         $champs = $this->champRepository->findAll();
 
         if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('realiser_prestation', $request->request->get('_token'))) {
+                 throw $this->createAccessDeniedException('Token CSRF invalide');
+            }
+
             $valeursChamps = [];
             foreach ($champs as $champ) {
                 $champIdStr = (string)$champ->getId();
                 if ($champ->getTypeChamp() === 'file') {
                     $file = $request->files->get('champ_' . $champIdStr);
                     if ($file) {
-                        $fileInfo = $uploader->upload($file);
-                        $fileInfo['type_document'] = $champ->getNom();
-                        $fileInfo['description'] = $champ->getDescription();
-                        $valeursChamps[$champIdStr] = ['file_info' => $fileInfo];
+                        try {
+                            $fileInfo = $uploader->upload($file);
+                            $fileInfo['type_document'] = $champ->getNom();
+                            $fileInfo['description'] = $champ->getDescription();
+                            $valeursChamps[$champIdStr] = ['file_info' => $fileInfo];
+                        } catch (\InvalidArgumentException $e) {
+                            $this->addFlash('error', $e->getMessage());
+                            return $this->render('admin/prestation/new_from_rdv.html.twig', [
+                                'rdv' => $rdv,
+                                'champs' => $champs
+                            ]);
+                        }
                     }
                 } else {
                     $valeursChamps[$champIdStr] = $request->request->get('champ_' . $champIdStr);
