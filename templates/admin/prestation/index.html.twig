@@ -1,0 +1,50 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Prestations réalisées{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Prestations réalisées</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Rendez-vous ID</th>
+                            <th>Coût Total</th>
+                            <th>Statut</th>
+                            <th class="w-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestation in prestations %}
+                            <tr>
+                                <td>{{ prestation.dateRealisation|date('d/m/Y H:i') }}</td>
+                                <td>{{ prestation.rendezVousId }}</td>
+                                <td>{{ prestation.coutTotal }} EUR</td>
+                                <td><span class="badge bg-green">{{ prestation.statut }}</span></td>
+                                <td>
+                                    <a href="{{ path('admin_prestation_show', {id: prestation.id}) }}" class="btn btn-white btn-sm">Détail</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center">Aucune prestation enregistrée</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

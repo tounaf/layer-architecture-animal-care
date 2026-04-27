@@ -16,6 +16,11 @@ services:
 
     Infrastructure\:
         resource: '../src/Infrastructure/'
+        exclude: '../src/Infrastructure/File/'
+
+    Infrastructure\File\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
 
     UI\:
         resource: '../src/UI/'
@@ -27,5 +32,9 @@ services:
     Domain\Animal\Repository\AnimalRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineAnimalRepository'
     Domain\Prestataire\Repository\PrestataireRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrinePrestataireRepository'
     Domain\Prestataire\Repository\ServiceProposeRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceProposeRepository'
+    Domain\Prestation\Repository\PrestationRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrinePrestationRepository'
+    Domain\Care\Repository\CarnetSanteRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineCarnetSanteRepository'
+    Domain\Document\Repository\DocumentRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineDocumentRepository'
     Domain\Service\Repository\ServiceRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceRepository'
     Domain\Service\Repository\ServiceCategorieRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceCategorieRepository'
+    Domain\Service\Repository\ServiceChampRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceChampRepository'
