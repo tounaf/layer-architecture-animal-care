@@ -19,7 +19,6 @@ doctrine:
             service_categorie_id: Infrastructure\Persistence\Doctrine\Type\ServiceCategorieIdType
             service_propose_id: Infrastructure\Persistence\Doctrine\Type\ServiceProposeIdType
             prestation_id: Infrastructure\Persistence\Doctrine\Type\PrestationIdType
-            carnet_sante_id: Infrastructure\Persistence\Doctrine\Type\CarnetSanteIdType
             service_champ_id: Infrastructure\Persistence\Doctrine\Type\ServiceChampIdType
             document_id: Infrastructure\Persistence\Doctrine\Type\DocumentIdType
     orm:
