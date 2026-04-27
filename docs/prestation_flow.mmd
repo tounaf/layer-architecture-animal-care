@@ -1,0 +1,33 @@
+sequenceDiagram
+    participant UI as PrestationAdminController
+    participant Application as RealiserPrestationHandler
+    participant Prestation as Prestation (Domain)
+    participant Care as CarnetSante (Domain)
+    participant Infra as Infrastructure (DB / Files)
+
+    UI->>UI: Saisie du coût et des champs dynamiques
+    UI->>Infra: Upload des fichiers via FileUploader
+    UI->>Application: Dispatch RealiserPrestationCommand
+
+    activate Application
+    Application->>Infra: findById(RendezVousId)
+    Application->>Prestation: creer(rdvId, serviceProposeId, ...)
+
+    loop Pour chaque champ dynamique
+        Application->>Infra: Créer Document (si fichier)
+        Application->>Prestation: ajouterValeurChamp(champId, valeur, ...)
+    end
+
+    Application->>Infra: save(Prestation)
+
+    Application->>Infra: findByAnimal(AnimalId)
+    alt Carnet inexistant
+        Application->>Care: creer(AnimalId)
+    end
+
+    Application->>Care: ajouterEntree(CONSULTATION, "Prestation réalisée", ...)
+    Application->>Infra: save(CarnetSante)
+
+    deactivate Application
+
+    Application-->>UI: Succès (Redirect Index)

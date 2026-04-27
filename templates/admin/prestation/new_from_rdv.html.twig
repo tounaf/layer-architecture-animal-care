@@ -1,0 +1,66 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Valider la prestation{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Validation de la prestation</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_token" value="{{ csrf_token('realiser_prestation') }}">
+
+            <div class="card">
+                <div class="card-header"><h3 class="card-title">Informations générales</h3></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Coût total (EUR)</label>
+                        <input type="number" step="0.01" name="coutTotal" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header"><h3 class="card-title">Champs spécifiques au service</h3></div>
+                <div class="card-body">
+                    {% for champ in champs %}
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {{ champ.nom }}
+                                {% if champ.isObligatoireGlobal %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {% if champ.typeChamp == 'textarea' %}
+                                <textarea name="champ_{{ champ.id }}" class="form-control" {% if champ.isObligatoireGlobal %}required{% endif %}></textarea>
+                            {% elseif champ.typeChamp == 'file' %}
+                                <input type="file" name="champ_{{ champ.id }}" class="form-control" {% if champ.isObligatoireGlobal %}required{% endif %}>
+                            {% elseif champ.typeChamp == 'date' %}
+                                <input type="date" name="champ_{{ champ.id }}" class="form-control" {% if champ.isObligatoireGlobal %}required{% endif %}>
+                            {% elseif champ.typeChamp == 'datetime' %}
+                                <input type="datetime-local" name="champ_{{ champ.id }}" class="form-control" {% if champ.isObligatoireGlobal %}required{% endif %}>
+                            {% else %}
+                                <input type="text" name="champ_{{ champ.id }}" class="form-control" {% if champ.isObligatoireGlobal %}required{% endif %}>
+                            {% endif %}
+                            <div class="form-hint">{{ champ.description }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">Enregistrer la prestation</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

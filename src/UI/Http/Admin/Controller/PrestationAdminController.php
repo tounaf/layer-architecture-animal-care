@@ -10,6 +10,8 @@ use Domain\RendezVous\Repository\RendezVousRepositoryInterface;
 use Domain\RendezVous\ValueObject\RendezVousId;
 use Domain\Prestataire\Repository\ServiceProposeRepositoryInterface;
 use Domain\Service\Repository\ServiceRepositoryInterface;
+use Domain\Service\Repository\ServiceChampRepositoryInterface;
+use Infrastructure\File\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +24,8 @@ class PrestationAdminController extends AbstractController
         private PrestationRepositoryInterface $repository,
         private RendezVousRepositoryInterface $rendezVousRepository,
         private ServiceProposeRepositoryInterface $serviceProposeRepository,
-        private ServiceRepositoryInterface $serviceRepository
+        private ServiceRepositoryInterface $serviceRepository,
+        private ServiceChampRepositoryInterface $champRepository
     ) {
     }
 
@@ -49,26 +52,56 @@ class PrestationAdminController extends AbstractController
         return $this->render('admin/prestation/show.html.twig', [
             'prestation' => $prestation,
             'rdv' => $rdv,
-            'service' => $service
+            'service' => $service,
+            'champs' => $this->champRepository->findAll()
         ]);
     }
 
     #[Route('/nouveau-depuis-rdv/{rdvId}', name: 'new_from_rdv')]
-    public function newFromRdv(string $rdvId, Request $request, RealiserPrestationHandler $handler): Response
+    public function newFromRdv(string $rdvId, Request $request, RealiserPrestationHandler $handler, FileUploader $uploader): Response
     {
         $rdv = $this->rendezVousRepository->findById(RendezVousId::fromString($rdvId));
         if (!$rdv) {
             throw $this->createNotFoundException();
         }
 
-        // Pour la démonstration, on valide directement sans formulaire complexe
-        // Dans un vrai projet, on utiliserait un PrestationType pour saisir le coût final
+        $champs = $this->champRepository->findAll();
+
         if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('realiser_prestation', $request->request->get('_token'))) {
+                 throw $this->createAccessDeniedException('Token CSRF invalide');
+            }
+
+            $valeursChamps = [];
+            foreach ($champs as $champ) {
+                $champIdStr = (string)$champ->getId();
+                if ($champ->getTypeChamp() === 'file') {
+                    $file = $request->files->get('champ_' . $champIdStr);
+                    if ($file) {
+                        try {
+                            $fileInfo = $uploader->upload($file);
+                            $fileInfo['type_document'] = $champ->getNom();
+                            $fileInfo['description'] = $champ->getDescription();
+                            $valeursChamps[$champIdStr] = ['file_info' => $fileInfo];
+                        } catch (\InvalidArgumentException $e) {
+                            $this->addFlash('error', $e->getMessage());
+                            return $this->render('admin/prestation/new_from_rdv.html.twig', [
+                                'rdv' => $rdv,
+                                'champs' => $champs
+                            ]);
+                        }
+                    }
+                } else {
+                    $valeursChamps[$champIdStr] = $request->request->get('champ_' . $champIdStr);
+                }
+            }
+
             $command = new RealiserPrestationCommand(
                 $rdvId,
-                (string) $request->request->get('serviceProposeId'),
+                (string) $rdv->getServiceProposeId(),
                 new \DateTimeImmutable(),
-                (float) $request->request->get('coutTotal')
+                (float) $request->request->get('coutTotal'),
+                $valeursChamps
             );
 
             $handler($command);
@@ -78,7 +111,8 @@ class PrestationAdminController extends AbstractController
         }
 
         return $this->render('admin/prestation/new_from_rdv.html.twig', [
-            'rdv' => $rdv
+            'rdv' => $rdv,
+            'champs' => $champs
         ]);
     }
 }

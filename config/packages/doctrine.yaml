@@ -20,6 +20,8 @@ doctrine:
             service_propose_id: Infrastructure\Persistence\Doctrine\Type\ServiceProposeIdType
             prestation_id: Infrastructure\Persistence\Doctrine\Type\PrestationIdType
             carnet_sante_id: Infrastructure\Persistence\Doctrine\Type\CarnetSanteIdType
+            service_champ_id: Infrastructure\Persistence\Doctrine\Type\ServiceChampIdType
+            document_id: Infrastructure\Persistence\Doctrine\Type\DocumentIdType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -76,6 +78,12 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/prestation'
                 prefix: 'Domain\Prestation\Entity'
                 alias: Prestation
+            Document:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine/document'
+                prefix: 'Domain\Document\Entity'
+                alias: Document
         controller_resolver:
             auto_mapping: false
 
