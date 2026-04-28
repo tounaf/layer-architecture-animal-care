@@ -2,6 +2,8 @@
 
 namespace Domain\Prestation\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Domain\Shared\Entity\AggregateRoot;
 use Domain\Prestation\ValueObject\PrestationId;
 use Domain\RendezVous\ValueObject\RendezVousId;
@@ -11,8 +13,8 @@ use Domain\Document\ValueObject\DocumentId;
 
 class Prestation extends AggregateRoot
 {
-    /** @var PrestationValeurChamp[] */
-    private array $valeursChamps = [];
+    /** @var Collection <int, PrestationValeurChamp> */
+    private Collection $valeursChamps;
 
     public function __construct(
         private PrestationId $id,
@@ -22,6 +24,7 @@ class Prestation extends AggregateRoot
         private float $coutTotal,
         private string $statut = 'realisee'
     ) {
+        $this->valeursChamps = new ArrayCollection();
     }
 
     public static function creer(
@@ -45,12 +48,13 @@ class Prestation extends AggregateRoot
         string $typeValeur = 'texte',
         ?DocumentId $documentId = null
     ): void {
-        $this->valeursChamps[] = new PrestationValeurChamp(
-            $this->id,
+        $this->valeursChamps->add(new PrestationValeurChamp(
+            $this,
             $champId,
             $valeur,
             $typeValeur,
             $documentId
+            )
         );
     }
 
@@ -60,5 +64,5 @@ class Prestation extends AggregateRoot
     public function getDateRealisation(): \DateTimeInterface { return $this->dateRealisation; }
     public function getCoutTotal(): float { return $this->coutTotal; }
     public function getStatut(): string { return $this->statut; }
-    public function getValeursChamps(): array { return $this->valeursChamps; }
+    public function getValeursChamps(): Collection { return $this->valeursChamps; }
 }

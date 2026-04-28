@@ -24,4 +24,9 @@ final class DoctrineRendezVousRepository implements RendezVousRepositoryInterfac
     {
         return $this->entityManager->find(RendezVous::class, $id);
     }
+
+    public function findAll(): array
+    {
+        return $this->entityManager->getRepository(RendezVous::class)->findAll();
+    }
 }

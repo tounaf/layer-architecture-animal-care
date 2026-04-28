@@ -18,7 +18,7 @@ class PrestationValeurFixtures extends Fixture implements DependentFixtureInterf
         $champsByNom = []; foreach($champs as $c) $champsByNom[$c->getNom()] = $c;
 
         $rdvs = $manager->getRepository(RendezVous::class)->findAll();
-
+        
         // Documents
         $doc1 = Document::creer('prestation_id_dummy', 'analyse', 'bilan_sang_kitty.pdf', '/uploads/2026/02/bilan_sang_kitty.pdf', 'application/pdf', 245000, "Résultats analyse sanguine");
         $doc2 = Document::creer('prestation_id_dummy', 'photo', 'cicatrice_kitty_j+10.jpg', '/uploads/2026/02/cicatrice_kitty.jpg', 'image/jpeg', 1250000, "Contrôle cicatrice J+10");
