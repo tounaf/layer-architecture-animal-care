@@ -29,6 +29,10 @@ class FileUploader
             throw new \InvalidArgumentException('Extension de fichier non autorisée');
         }
 
+        $originalName = $file->getClientOriginalName();
+        $mime = $file->getClientMimeType();
+        $size = $file->getSize();
+
         $fileName = uniqid() . '.' . $extension;
         $datePath = date('Y/m');
         $uploadDir = $this->targetDirectory . '/' . $datePath;
@@ -40,10 +44,10 @@ class FileUploader
         $file->move($uploadDir, $fileName);
 
         return [
-            'nom' => $file->getClientOriginalName(),
+            'nom' => $originalName,
             'url' => '/uploads/' . $datePath . '/' . $fileName,
-            'mime' => $file->getClientMimeType(),
-            'taille' => $file->getSize()
+            'mime' => $mime,
+            'taille' => $size
         ];
     }
 }

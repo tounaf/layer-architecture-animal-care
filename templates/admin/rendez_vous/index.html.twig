@@ -3,30 +3,100 @@
 {% block title %}Gestion des Rendez-vous{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Liste des Rendez-vous</h4>
-                    <button class="btn btn-primary btn-sm">Nouveau RDV</button>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Rendez-vous</h2>
+            </div>
+            {# <div class="col-auto ms-auto">
+                <a href="{{ path('admin_rendezvous_new') }}" class="btn btn-primary">
+                    Nouveau RDV
+                </a>
+            </div> #}
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Client</th>
+                            <th>Animal</th>
+                            <th>Statut</th>
+                            <th class="w-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rdv in rendezVousList %}
                             <tr>
-                                <th>Date/Heure</th>
-                                <th>Client</th>
-                                <th>Animal</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
+                                <td>
+                                    {{ rdv.dateRdv|date('d/m/Y') }}
+                                </td>
+                                <td>
+                                    {{ rdv.plageHoraire.debut }} - {{ rdv.plageHoraire.fin }}
+                                </td>
+                                <td>
+                                    {{ rdv.clientId }}
+                                </td>
+                                <td>
+                                    {{ rdv.animalId }}
+                                </td>
+                                <td>
+                                    {% if rdv.statut.value == 'en_attente' %}
+                                        <span class="badge bg-warning">En attente</span>
+                                    {% elseif rdv.statut.value == 'confirme' %}
+                                        <span class="badge bg-success">Confirmé</span>
+                                    {% elseif rdv.statut.value == 'annule' %}
+                                        <span class="badge bg-danger">Annulé</span>
+                                    {% elseif rdv.statut.value == 'termine' %}
+                                        <span class="badge bg-primary">Terminé</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-list flex-nowrap">
+                                        
+                                        {# <a href="{{ path('admin_rendezvous_show', {id: rdv.id}) }}" class="btn btn-white btn-sm">
+                                            Voir
+                                        </a>
+
+                                        <a href="{{ path('admin_rendezvous_edit', {id: rdv.id}) }}" class="btn btn-white btn-sm">
+                                            Modifier
+                                        </a> #}
+
+                                        {# 👉 Bouton conditionnel #}
+                                        {% if rdv.statut.value == 'en_attente' %}
+                                            <a href="{{ path('admin_prestation_new_from_rdv', {rdvId: rdv.id}) }}"
+                                            class="btn btn-primary btn-sm">
+                                                Créer prestation
+                                            </a>
+                                        {% endif %}
+
+                                        {# <form method="post"
+                                            action="{{ path('admin_rendezvous_delete', {id: rdv.id}) }}"
+                                            onsubmit="return confirm('Êtes-vous sûr ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rdv.id) }}">
+                                            <button class="btn btn-danger btn-sm">Supprimer</button>
+                                        </form> #}
+
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Liste des rendez-vous -->
-                        </tbody>
-                    </table>
-                </div>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    Aucun rendez-vous trouvé
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

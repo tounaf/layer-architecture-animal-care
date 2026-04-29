@@ -2,6 +2,8 @@
 
 namespace Domain\Care\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Domain\Shared\Entity\AggregateRoot;
 use Domain\Care\ValueObject\CarnetSanteId;
 use Domain\Shared\ValueObject\AnimalId;
@@ -12,8 +14,8 @@ use Domain\Shared\ValueObject\PrestataireId;
 
 class CarnetSante extends AggregateRoot
 {
-    /** @var EntreeCarnet[] */
-    private array $entrees = [];
+    /** @var Collection<int, EntreeCarnet> */
+    private Collection $entrees;
     private \DateTimeImmutable $dateCreation;
     private \DateTimeImmutable $dateDerniereMiseAJour;
 
@@ -21,9 +23,10 @@ class CarnetSante extends AggregateRoot
         private CarnetSanteId $id,
         private AnimalId $animalId,
         private string $informationsGenerales = '',
-        private array $metadonnees = [],
+        private string $metadonnees = '',
         ?\DateTimeImmutable $dateCreation = null
     ) {
+        $this->entrees = new ArrayCollection();
         $this->dateCreation = $dateCreation ?? new \DateTimeImmutable();
         $this->dateDerniereMiseAJour = new \DateTimeImmutable();
     }
@@ -31,7 +34,7 @@ class CarnetSante extends AggregateRoot
     public static function creer(
         AnimalId $animalId,
         string $informationsGenerales = '',
-        array $metadonnees = [],
+        string $metadonnees = '',
         ?\DateTimeImmutable $dateCreation = null
     ): self {
         return new self(CarnetSanteId::generate(), $animalId, $informationsGenerales, $metadonnees, $dateCreation);
@@ -44,7 +47,7 @@ class CarnetSante extends AggregateRoot
         PrestataireId $etabliPar,
         bool $visibleProprietaire = true,
         ?\DateTimeInterface $dateRappel = null,
-        array $donneesStructurees = []
+        string $donneesStructurees = ''
     ): void {
         $entreeId = EntreeCarnetId::generate();
         $entree = new EntreeCarnet(
@@ -72,16 +75,16 @@ class CarnetSante extends AggregateRoot
 
     public function getId(): CarnetSanteId { return $this->id; }
     public function getAnimalId(): AnimalId { return $this->animalId; }
-    public function getEntrees(): array { return $this->entrees; }
+    public function getEntrees(): Collection { return $this->entrees; }
     public function getDateCreation(): \DateTimeImmutable { return $this->dateCreation; }
     public function getInformationsGenerales(): string { return $this->informationsGenerales; }
-    public function getMetadonnees(): array { return $this->metadonnees; }
+    public function getMetadonnees(): string { return $this->metadonnees; }
     public function getDateDerniereMiseAJour(): \DateTimeImmutable { return $this->dateDerniereMiseAJour; }
 
-    public function mettreAJourInformations(string $info, array $meta = []): void
+    public function mettreAJourInformations(string $info, string $meta = ''): void
     {
         $this->informationsGenerales = $info;
-        $this->metadonnees = array_merge($this->metadonnees, $meta);
+        $this->metadonnees = $meta;
         $this->dateDerniereMiseAJour = new \DateTimeImmutable();
     }
 }

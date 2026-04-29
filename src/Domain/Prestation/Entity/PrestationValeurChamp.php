@@ -2,14 +2,14 @@
 
 namespace Domain\Prestation\Entity;
 
-use Domain\Prestation\ValueObject\PrestationId;
 use Domain\Service\ValueObject\ServiceChampId;
 use Domain\Document\ValueObject\DocumentId;
+use Domain\Prestation\ValueObject\PrestationId;
 
 class PrestationValeurChamp
 {
     public function __construct(
-        private PrestationId $prestationId,
+        private Prestation $prestation,
         private ServiceChampId $serviceChampId,
         private ?string $valeur = null,
         private string $typeValeur = 'texte',
@@ -17,7 +17,8 @@ class PrestationValeurChamp
     ) {
     }
 
-    public function getPrestationId(): PrestationId { return $this->prestationId; }
+    public function getPrestation(): Prestation { return $this->prestation; }
+    public function getPrestationId(): PrestationId { return $this->prestation->getId(); }
     public function getServiceChampId(): ServiceChampId { return $this->serviceChampId; }
     public function getValeur(): ?string { return $this->valeur; }
     public function getTypeValeur(): string { return $this->typeValeur; }

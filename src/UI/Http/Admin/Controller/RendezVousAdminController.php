@@ -2,6 +2,7 @@
 
 namespace UI\Http\Admin\Controller;
 
+use Domain\RendezVous\Repository\RendezVousRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,8 +11,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class RendezVousAdminController extends AbstractController
 {
     #[Route('', name: 'index')]
-    public function index(): Response
+    public function index(RendezVousRepositoryInterface $rendezVousRepository): Response
     {
-        return $this->render('admin/rendez_vous/index.html.twig');
+        return $this->render('admin/rendez_vous/index.html.twig', [
+            'rendezVousList' => $rendezVousRepository->findAll(),
+        ]);
     }
 }

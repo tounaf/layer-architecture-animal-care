@@ -86,6 +86,9 @@ final class RealiserPrestationHandler
             $rdv->getPrestataireId()
         );
 
+        $rdv->terminer();
+        $this->rendezVousRepository->save($rdv);
+        
         $this->carnetSanteRepository->save($carnet);
 
         // Dispatch events (ex: EntreeAjoutee)

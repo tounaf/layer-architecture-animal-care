@@ -21,7 +21,7 @@ class EntreeCarnet
         private PrestataireId $etabliPar,
         private bool $visibleProprietaire = true,
         private ?\DateTimeInterface $dateRappel = null,
-        private array $donneesStructurees = []
+        private string $donneesStructurees = ''
     ) {
         $this->dateEntree = new \DateTimeImmutable();
         $this->dateModification = new \DateTimeImmutable();
@@ -67,7 +67,7 @@ class EntreeCarnet
         return $this->dateRappel;
     }
 
-    public function getDonneesStructurees(): array
+    public function getDonneesStructurees(): string
     {
         return $this->donneesStructurees;
     }

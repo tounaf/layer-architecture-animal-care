@@ -86,6 +86,19 @@ class RendezVous extends AggregateRoot
         ));
     }
 
+    public function terminer(): void
+    {
+        if ($this->statut === StatutRendezVous::ANNULE) {
+            throw new \DomainException('Un rendez-vous annulé ne peut pas être terminé');
+        }
+
+        if ($this->statut === StatutRendezVous::TERMINE) {
+            return;
+        }
+
+        $this->statut = StatutRendezVous::TERMINE;
+    }
+
     public function getId(): RendezVousId { return $this->id; }
     public function getClientId(): ClientId { return $this->clientId; }
     public function getAnimalId(): AnimalId { return $this->animalId; }
