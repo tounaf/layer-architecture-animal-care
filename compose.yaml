@@ -13,6 +13,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    ports:
+      - "3308:3306"
     volumes:
       - database_data:/var/lib/mysql:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!

@@ -1,0 +1,14 @@
+erDiagram
+    %% Rappel des tables principales
+    CLIENT ||--o{ ANIMAL : possede
+    ANIMAL ||--|| CARNET_SANTE : a
+    CARNET_SANTE ||--o{ ENTREE_CARNET : contient
+    ENTREE_CARNET ||--o{ DOCUMENT : peut_avoir
+    ENTREE_CARNET }o--|| TYPE_ENTREE_CATEGORIE : est_de_type
+    ENTREE_CARNET ||--o{ RAPPEL : genere
+    CARNET_SANTE ||--o{ ALERTE : a
+    CARNET_SANTE ||--o{ SUIVI_CONSTANTE : enregistre
+    
+    PRESTATAIRE ||--o{ ENTREE_CARNET : "auteur de"
+    PRESTATION_REALISEE ||--o| ENTREE_CARNET : "peut_generer"
+    PRESCRIPTION }o--|| ENTREE_CARNET : "contenue dans"

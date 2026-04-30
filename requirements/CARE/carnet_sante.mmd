@@ -1,0 +1,139 @@
+erDiagram
+    %% ============================================
+    %% CŒUR DU CARNET DE SANTÉ - FLEXIBLE
+    %% ============================================
+    
+    ANIMAL ||--|| CARNET_SANTE : possede
+    CARNET_SANTE {
+        int id_carnet PK
+        int id_animal FK
+        date date_creation
+        text informations_generales
+        json metadonnees "Données extensibles"
+        date date_derniere_mise_a_jour
+    }
+    
+    %% ============================================
+    %% ENTREES DU CARNET - PATTERN "EVENT SOURCING"
+    %% ============================================
+    
+    CARNET_SANTE ||--o{ ENTREE_CARNET : contient
+    
+    ENTREE_CARNET {
+        int id_entree PK
+        int id_carnet FK
+        int id_prestation FK "Optionnel - lien avec PRESTATION_REALISEE"
+        datetime date_entree
+        string type_entree "vaccination/vermifuge/traitement/examen/chirurgie/consultation/prescription"
+        string titre
+        text description
+        json donnees_structurees "Données spécifiques au type d'entrée"
+        boolean visible_proprietaire
+        date date_rappel "Pour alertes automatiques"
+        int id_etabli_par FK "Référence au prestataire"
+        datetime date_modification
+    }
+    
+    %% ============================================
+    %% DOCUMENTS ATTACHES
+    %% ============================================
+    
+    ENTREE_CARNET ||--o{ DOCUMENT : attache
+    
+    DOCUMENT {
+        int id_document PK
+        int id_entree FK
+        string type_document "radio/analyse/photo/ordonnance/certificat"
+        string nom_fichier
+        string chemin_url
+        string type_mime
+        int taille
+        date date_upload
+        text description
+    }
+    
+    %% ============================================
+    %% CATEGORISATION DES ENTRÉES POUR RECHERCHE
+    %% ============================================
+    
+    TYPE_ENTREE_CATEGORIE {
+        int id_categorie PK
+        string code "VACCIN"
+        string nom "Vaccination"
+        string icone
+        string couleur
+        boolean actif
+    }
+    
+    TYPE_ENTREE_CATEGORIE ||--o{ ENTREE_CARNET : categorise
+    ENTREE_CARNET }o--|| TYPE_ENTREE_CATEGORIE : est_de_type
+    
+    %% ============================================
+    %% RAPPELS AUTOMATIQUES
+    %% ============================================
+    
+    ENTREE_CARNET ||--o{ RAPPEL : genere
+    
+    RAPPEL {
+        int id_rappel PK
+        int id_entree FK
+        date date_rappel
+        string type_rappel "vaccin/vermifuge/controle"
+        string message
+        boolean envoye
+        date date_envoi
+        boolean actif
+    }
+    
+    %% ============================================
+    %% ALERTES (ex: allergies, maladies chroniques)
+    %% ============================================
+    
+    CARNET_SANTE ||--o{ ALERTE : contient
+    
+    ALERTE {
+        int id_alerte PK
+        int id_carnet FK
+        string type_alerte "allergie/maladie_chronique/traitement_long"
+        string titre
+        text description
+        string severite "basse/moyenne/elevee/critique"
+        boolean active
+        date date_debut
+        date date_fin "si temporaire"
+    }
+    
+    %% ============================================
+    %% CONSTANTES / SUIVI (poids, température, etc.)
+    %% ============================================
+    
+    CARNET_SANTE ||--o{ SUIVI_CONSTANTE : enregistre
+    
+    SUIVI_CONSTANTE {
+        int id_suivi PK
+        int id_carnet FK
+        int id_entree FK "optionnel - lié à une consultation"
+        date date_mesure
+        string type_mesure "poids/temperature/frequence_cardiaque/IMC"
+        float valeur
+        string unite "kg/°C/bpm"
+        text remarques
+    }
+    
+    %% ============================================
+    %% RELATIONS AVEC LE RESTE DU SYSTÈME
+    %% ============================================
+    
+    PRESTATION_REALISEE ||--o| ENTREE_CARNET : "peut_generer"
+    
+    PRESTATION_REALISEE {
+        int id_prestation PK
+        int id_rdv FK
+        float cout_total
+    }
+    
+    PRESTATAIRE ||--o{ ENTREE_CARNET : auteur
+    PRESTATAIRE {
+        int id_prestataire PK
+        string nom
+    }

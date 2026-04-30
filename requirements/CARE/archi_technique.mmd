@@ -1,0 +1,104 @@
+graph TB
+    subgraph "INTERNET"
+        Users[Utilisateurs<br/>Clients / Prestataires / Admins]
+        CDN[CDN - <br/>Cache statique + DDoS protection]
+    end
+    
+    subgraph "HÉBERGEMENT - OVH / AWS / IONOS"
+        
+        subgraph "Zone intermediaire"
+            LB[Load Balancer<br/>HAProxy / Nginx]
+            WAF[WAF]
+        end
+        
+        subgraph "APPLICATION - Zone applicative"
+            direction TB
+            Web1[Web Server 1<br/>Nginx + PHP-FPM]
+            Web2[Web Server 2<br/>Nginx + PHP-FPM]
+            Web3[Web Server 3<br/>Nginx + PHP-FPM]
+        end
+        
+        subgraph "CACHE & QUEUE"
+            Redis[Redis Cluster<br/>Cache + Sessions + Queue]
+        end
+        
+        subgraph "BASE DE DONNÉES"
+            DB_Master[(MySQL Master<br/>Écritures)]
+            DB_Slave1[(MySQL Slave 1<br/>Lectures)]
+            DB_Slave2[(MySQL Slave 2<br/>Lectures)]
+            Backup[(Backup Server<br/>Copies quotidiennes)]
+        end
+        
+        subgraph "STOCKAGE FICHIERS"
+            Storage[MinIO / S3<br/>Images - Documents - Rapports]
+        end
+        
+        subgraph "MONITORING"
+            Prometheus[Prometheus<br/>Métriques]
+            Grafana[Grafana<br/>Tableaux de bord]
+        end
+        
+        subgraph "ADMINISTRATION"
+            VPN[VPN d'administration]
+            Jump[Accès sécurisé]
+        end
+    end
+    
+    subgraph "SERVICES EXTERNES"
+        MCB[Bank API]
+        MVola[MVola API]
+        OM[Orange Money API]
+        Airtel[Airtel Money API]
+        SMTP[SMTP - SendGrid / Mailgun]
+        SMS[SMS Gateway - Twilio / Local]
+    end
+    
+    Users --> CDN
+    CDN --> LB
+    LB --> WAF
+    WAF --> Web1
+    WAF --> Web2
+    WAF --> Web3
+    
+    Web1 --> Redis
+    Web2 --> Redis
+    Web3 --> Redis
+    
+    Web1 --> DB_Master
+    Web1 --> DB_Slave1
+    Web1 --> DB_Slave2
+    Web2 --> DB_Master
+    Web2 --> DB_Slave1
+    Web2 --> DB_Slave2
+    Web3 --> DB_Master
+    Web3 --> DB_Slave1
+    Web3 --> DB_Slave2
+    
+    Web1 --> Storage
+    Web2 --> Storage
+    Web3 --> Storage
+    
+    Web1 --> MCB
+    Web1 --> MVola
+    Web1 --> OM
+    Web1 --> Airtel
+    Web1 --> SMTP
+    Web1 --> SMS
+    
+    DB_Master --> DB_Slave1
+    DB_Master --> DB_Slave2
+    DB_Master --> Backup
+    
+    Redis --> Prometheus
+    Web1 --> Prometheus
+    Web2 --> Prometheus
+    Web3 --> Prometheus
+    DB_Master --> Prometheus
+    
+    Prometheus --> Grafana
+    
+    Admin --> VPN
+    VPN --> Jump
+    Jump --> Web1
+    Jump --> DB_Master
+    Jump --> Redis

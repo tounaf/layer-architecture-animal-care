@@ -99,6 +99,20 @@ class RendezVous extends AggregateRoot
         $this->statut = StatutRendezVous::TERMINE;
     }
 
+    public function reporter(\DateTimeInterface $nouvelleDate, string $nouvelleHeure): void
+    {
+        if ($this->statut === StatutRendezVous::TERMINE || $this->statut === StatutRendezVous::ANNULE) {
+            throw new \DomainException('Impossible de reporter un rendez-vous terminé ou annulé');
+        }
+
+        $this->dateRdv = $nouvelleDate;
+        // On recrée la plage horaire avec la même durée
+        $this->plageHoraire = new TimeRange($nouvelleHeure, $this->plageHoraire->getDuree());
+        
+        // On peut décider de repasser en attente ou rester confirmé
+        // Ici on reste dans le statut actuel mais avec une nouvelle date
+    }
+
     public function getId(): RendezVousId { return $this->id; }
     public function getClientId(): ClientId { return $this->clientId; }
     public function getAnimalId(): AnimalId { return $this->animalId; }

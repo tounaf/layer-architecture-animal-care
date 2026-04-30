@@ -14,6 +14,7 @@ final class CareMenuProvider implements MenuProviderInterface
                 label: 'Carnet de Santé',
                 icon: 'ti ti-heart-rate-monitor',
                 routeName: 'admin_care_index',
+                routePrefix: 'admin_care_',
                 children: [
                     new MenuItem('Liste', null, 'admin_care_index'),
                     // new MenuItem('Nouveau', null, 'admin_care_new'),

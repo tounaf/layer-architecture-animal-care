@@ -62,29 +62,58 @@
                                 <td>
                                     <div class="btn-list flex-nowrap">
                                         
-                                        {# <a href="{{ path('admin_rendezvous_show', {id: rdv.id}) }}" class="btn btn-white btn-sm">
-                                            Voir
-                                        </a>
-
-                                        <a href="{{ path('admin_rendezvous_edit', {id: rdv.id}) }}" class="btn btn-white btn-sm">
-                                            Modifier
-                                        </a> #}
-
-                                        {# 👉 Bouton conditionnel #}
                                         {% if rdv.statut.value == 'en_attente' %}
-                                            <a href="{{ path('admin_prestation_new_from_rdv', {rdvId: rdv.id}) }}"
-                                            class="btn btn-primary btn-sm">
-                                                Créer prestation
-                                            </a>
+                                            <form method="post" action="{{ path('admin_rendezvous_confirm', {id: rdv.id}) }}" class="d-inline">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="ti ti-check"></i> Confirmer
+                                                </button>
+                                            </form>
+
+                                            <form method="post" action="{{ path('admin_rendezvous_cancel', {id: rdv.id}) }}" class="d-inline" onsubmit="return confirm('Annuler ce rendez-vous ?');">
+                                                <button class="btn btn-danger btn-sm">
+                                                    <i class="ti ti-x"></i> Annuler
+                                                </button>
+                                            </form>
+
+                                            <button class="btn btn-info btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#reschedule-{{ rdv.id }}">
+                                                <i class="ti ti-calendar-time"></i> Reporter
+                                            </button>
                                         {% endif %}
 
-                                        {# <form method="post"
-                                            action="{{ path('admin_rendezvous_delete', {id: rdv.id}) }}"
-                                            onsubmit="return confirm('Êtes-vous sûr ?');">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rdv.id) }}">
-                                            <button class="btn btn-danger btn-sm">Supprimer</button>
-                                        </form> #}
+                                        {% if rdv.statut.value == 'confirme' %}
+                                            <a href="{{ path('admin_prestation_new_from_rdv', {rdvId: rdv.id}) }}"
+                                            class="btn btn-primary btn-sm">
+                                                <i class="ti ti-plus"></i> Créer prestation
+                                            </a>
 
+                                            <button class="btn btn-info btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#reschedule-{{ rdv.id }}">
+                                                <i class="ti ti-calendar-time"></i> Reporter
+                                            </button>
+
+                                            <form method="post" action="{{ path('admin_rendezvous_cancel', {id: rdv.id}) }}" class="d-inline" onsubmit="return confirm('Annuler ce rendez-vous confirmé ?');">
+                                                <button class="btn btn-outline-danger btn-sm">
+                                                    Annuler
+                                                </button>
+                                            </form>
+                                        {% endif %}
+
+                                    </div>
+
+                                    {# Formulaire de report (caché par défaut) #}
+                                    <div class="collapse mt-2" id="reschedule-{{ rdv.id }}">
+                                        <div class="card card-body">
+                                            <form method="post" action="{{ path('admin_rendezvous_reschedule', {id: rdv.id}) }}">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Nouvelle date</label>
+                                                    <input type="date" name="date" class="form-control form-control-sm" required value="{{ rdv.dateRdv|date('Y-m-d') }}">
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label class="form-label">Nouvelle heure</label>
+                                                    <input type="time" name="heure" class="form-control form-control-sm" required value="{{ rdv.plageHoraire.debut }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-sm w-100">Confirmer le report</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

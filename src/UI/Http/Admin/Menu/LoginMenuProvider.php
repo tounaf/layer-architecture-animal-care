@@ -14,6 +14,7 @@ final class LoginMenuProvider implements MenuProviderInterface
                 label: 'Login',
                 icon: 'ti ti-box',
                 routeName: 'admin_login_index',
+                routePrefix: 'admin_login_',
                 children: [
                     new MenuItem('Liste', null, 'admin_login_index'),
                     // new MenuItem('Nouveau', null, 'admin_login_new'),

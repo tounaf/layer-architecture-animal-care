@@ -14,6 +14,7 @@ final class AnimalMenuProvider implements MenuProviderInterface
                 label: 'Animal',
                 icon: 'ti ti-box',
                 routeName: 'admin_animal_index',
+                routePrefix: 'admin_animal_',
                 children: [
                     new MenuItem('Liste', null, 'admin_animal_index'),
                     // new MenuItem('Nouveau', null, 'admin_animal_new'),

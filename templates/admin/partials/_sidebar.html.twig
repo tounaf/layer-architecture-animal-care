@@ -26,24 +26,28 @@
 
     <div data-simplebar>
 
+        {% set current_route = app.request.attributes.get('_route', '') %}
+
         <!--- Sidenav Menu -->
         <ul class="side-nav">
             <li class="side-nav-title">Navigation</li>
 
             {% for item in menu_registry.getItems() %}
+                {% set is_active = item.isActive(current_route) %}
                 <li class="side-nav-item">
                     {% if item.hasChildren() %}
                         {% set collapseId = 'sidebar' ~ loop.index %}
-                        <a data-bs-toggle="collapse" href="#{{ collapseId }}" aria-expanded="false" aria-controls="{{ collapseId }}" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#{{ collapseId }}" aria-expanded="{{ is_active ? 'true' : 'false' }}" aria-controls="{{ collapseId }}" class="side-nav-link {{ is_active ? 'active' : '' }}">
                             <span class="menu-icon"><i class="{{ item.icon }}"></i></span>
                             <span class="menu-text"> {{ item.label }} </span>
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="{{ collapseId }}">
+                        <div class="collapse {{ is_active ? 'show' : '' }}" id="{{ collapseId }}">
                             <ul class="sub-menu">
                                 {% for child in item.children %}
+                                    {% set is_child_active = child.isActive(current_route) %}
                                     <li class="side-nav-item">
-                                        <a href="{{ child.routeName ? path(child.routeName) : '#' }}" class="side-nav-link">
+                                        <a href="{{ child.routeName ? path(child.routeName) : '#' }}" class="side-nav-link {{ is_child_active ? 'active' : '' }}">
                                             <span class="menu-text">{{ child.label }}</span>
                                         </a>
                                     </li>
@@ -51,7 +55,7 @@
                             </ul>
                         </div>
                     {% else %}
-                        <a href="{{ item.routeName ? path(item.routeName) : '#' }}" class="side-nav-link">
+                        <a href="{{ item.routeName ? path(item.routeName) : '#' }}" class="side-nav-link {{ is_active ? 'active' : '' }}">
                             <span class="menu-icon"><i class="{{ item.icon }}"></i></span>
                             <span class="menu-text"> {{ item.label }} </span>
                         </a>

@@ -10,12 +10,37 @@ Le système repose sur trois composants principaux situés dans `src/UI/Http/Sha
     *   `label` : Le nom affiché.
     *   `icon` : L'icône (Tabler Icons ou Solar Icons).
     *   `routeName` : Le nom de la route Symfony.
+    *   `routePrefix` : (Optionnel) Un préfixe de route pour marquer l'item comme **actif** (ex: `admin_animal_`).
     *   `children` : Un tableau de `MenuItem` pour créer des sous-menus.
     *   `roles` : (Optionnel) Restriction d'affichage par rôle.
 
 2.  **`MenuProviderInterface`** : L'interface que chaque domaine doit implémenter pour s'enregistrer dans le menu. Elle est automatiquement tagguée avec `app.menu_provider`.
 
 3.  **`MenuRegistry`** : Le service central qui collecte tous les providers et fournit la liste finale des items à Twig.
+
+---
+
+## ✨ État Actif Automatique (Highlight)
+
+Le système détecte automatiquement quel menu est "actif" (en surbrillance) en fonction de la page consultée.
+
+### Comment ça marche ?
+La classe `MenuItem` contient une méthode `isActive(string $currentRoute)` qui vérifie :
+1. Si la route actuelle correspond exactement au `routeName`.
+2. **OU** si la route actuelle commence par le `routePrefix`.
+3. **OU** si l'un de ses sous-menus est actif (récursivité).
+
+### Exemple de configuration :
+```php
+new MenuItem(
+    label: 'Animaux',
+    icon: 'ti ti-dog',
+    routeName: 'admin_animal_index',
+    routePrefix: 'admin_animal_' // Tous les CRUD (new, edit, show) activeront ce menu
+)
+```
+
+Dans le template Twig, le menu parent se dépliera automatiquement (`show`) si un enfant est actif.
 
 ## 🛠️ Utilisation via le Générateur
 

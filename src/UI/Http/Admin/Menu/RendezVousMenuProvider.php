@@ -14,6 +14,7 @@ final class RendezVousMenuProvider implements MenuProviderInterface
                 label: 'Rendez-vous',
                 icon: 'ti ti-calendar-event',
                 routeName: 'admin_rendezvous_index',
+                routePrefix: 'admin_rendezvous_',
                 children: [
                     new MenuItem('Liste', null, 'admin_rendezvous_index'),
                 ]
