@@ -1,0 +1,13 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\User\Entity\Action" table="actions">
+        <id name="id" type="action_id" column="id" />
+        <field name="actionName" length="255" column="action_name" />
+        <field name="actionDescription" type="text" column="action_description" />
+        <field name="createdAt" type="datetime_immutable" column="created_at" />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,68 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Utilisateurs</h4>
+                    <a href="{{ path('admin_user_new') }}" class="btn btn-primary">Nouvel utilisateur</a>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Login</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Mail</th>
+                                <th>Statut</th>
+                                <th>Groupes</th>
+                                <th>Profils</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.login }}</td>
+                                <td>{{ user.lastname }}</td>
+                                <td>{{ user.firstname }}</td>
+                                <td>{{ user.mail }}</td>
+                                <td>{{ user.isActive ? 'Actif' : 'Inactif' }}</td>
+                                <td>
+                                    {% for group in user.groups %}
+                                        <span class="badge bg-info">{{ group.groupName }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for profile in user.profiles %}
+                                        <span class="badge bg-secondary">{{ profile.profileName }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-warning">Editer</a>
+                                        <form method="post" action="{{ path('admin_user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');" style="display: inline-block;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                            <button class="btn btn-sm btn-danger">Supprimer</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center">Aucun utilisateur trouvé</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
