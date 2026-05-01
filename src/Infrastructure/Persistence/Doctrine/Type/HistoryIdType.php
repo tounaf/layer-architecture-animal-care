@@ -10,6 +10,14 @@ class HistoryIdType extends StringType
 {
     public const NAME = 'history_id';
 
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?HistoryId
     {
         return $value !== null ? HistoryId::fromString($value) : null;

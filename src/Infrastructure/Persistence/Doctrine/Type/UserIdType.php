@@ -9,6 +9,14 @@ use Domain\User\ValueObject\UserId;
 class UserIdType extends StringType
 {
     public const NAME = 'user_id';
+    
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ?UserId
     {
