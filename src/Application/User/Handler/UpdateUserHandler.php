@@ -6,9 +6,11 @@ use Application\User\Command\UpdateUserCommand;
 use Domain\User\Repository\UserRepositoryInterface;
 use Domain\User\Repository\GroupRepositoryInterface;
 use Domain\User\Repository\ProfileRepositoryInterface;
+use Domain\User\Repository\RightRepositoryInterface;
 use Domain\User\ValueObject\UserId;
 use Domain\User\ValueObject\GroupId;
 use Domain\User\ValueObject\ProfileId;
+use Domain\User\ValueObject\RightId;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Infrastructure\Security\SecurityUser;
 
@@ -18,6 +20,7 @@ final class UpdateUserHandler
         private UserRepositoryInterface $userRepository,
         private GroupRepositoryInterface $groupRepository,
         private ProfileRepositoryInterface $profileRepository,
+        private RightRepositoryInterface $rightRepository,
         private UserPasswordHasherInterface $passwordHasher
     ) {
     }
@@ -56,6 +59,14 @@ final class UpdateUserHandler
             $profile = $this->profileRepository->findById(ProfileId::fromString($profileId));
             if ($profile) {
                 $user->addProfile($profile);
+            }
+        }
+
+        $user->clearRights();
+        foreach ($command->rights as $rightId) {
+            $right = $this->rightRepository->findById(RightId::fromString($rightId));
+            if ($right) {
+                $user->addRight($right);
             }
         }
 

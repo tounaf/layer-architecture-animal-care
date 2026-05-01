@@ -20,6 +20,11 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
             foreach ($group->getRights() as $right) {
                 $roles[] = 'ROLE_' . strtoupper($right->getRightCode());
             }
+            foreach ($group->getProfiles() as $profile) {
+                foreach ($profile->getRights() as $right) {
+                    $roles[] = 'ROLE_' . strtoupper($right->getRightCode());
+                }
+            }
         }
 
         foreach ($this->user->getProfiles() as $profile) {

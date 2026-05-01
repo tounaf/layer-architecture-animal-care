@@ -1,0 +1,23 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Détails groupe{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title">Détails : {{ group.groupName }}</h4>
+            <a href="{{ path('admin_group_index') }}" class="btn btn-secondary">Retour</a>
+        </div>
+        <div class="card-body">
+            <p><strong>ID :</strong> {{ group.id }}</p>
+            <h5>Profils associés</h5>
+            <ul>
+                {% for profile in group.profiles %}<li>{{ profile.profileName }}</li>{% endfor %}
+            </ul>
+            <h5>Droits associés</h5>
+            <ul>
+                {% for right in group.rights %}<li>{{ right.rightName }} ({{ right.rightCode }})</li>{% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

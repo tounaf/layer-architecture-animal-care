@@ -26,13 +26,17 @@
                             <div class="col-md-6">{{ form_row(form.isActive) }}</div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <h5>Groupes</h5>
                                 {{ form_widget(form.groups) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <h5>Profils</h5>
                                 {{ form_widget(form.profiles) }}
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Droits directs</h5>
+                                {{ form_widget(form.rights) }}
                             </div>
                         </div>
                         <div class="mt-4">

@@ -4,6 +4,7 @@ namespace UI\Http\Admin\Form;
 
 use Domain\User\Entity\Group;
 use Domain\User\Entity\Profile;
+use Domain\User\Entity\Right;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -35,6 +36,13 @@ class UserType extends AbstractType
             ->add('groups', EntityType::class, [
                 'class' => Group::class,
                 'choice_label' => 'groupName',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+            ])
+            ->add('rights', EntityType::class, [
+                'class' => Right::class,
+                'choice_label' => 'rightName',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,

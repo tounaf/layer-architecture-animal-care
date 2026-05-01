@@ -1,0 +1,19 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Nouveau groupe{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header"><h4 class="card-title">Nouveau groupe</h4></div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                {{ form_row(form.groupName) }}
+                <div class="row">
+                    <div class="col-md-6">{{ form_row(form.profiles) }}</div>
+                    <div class="col-md-6">{{ form_row(form.rights) }}</div>
+                </div>
+                <button class="btn btn-success mt-3">Créer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

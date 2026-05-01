@@ -10,14 +10,6 @@ class ProfileIdType extends StringType
 {
     public const NAME = 'profile_id';
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
-    {
-        return $platform->getStringTypeDeclarationSQL([
-            'length' => $column['length'] ?? 39,
-            'fixed' => false,
-        ]);
-    }
-
     public function convertToPHPValue($value, AbstractPlatform $platform): ?ProfileId
     {
         return $value !== null ? ProfileId::fromString($value) : null;
