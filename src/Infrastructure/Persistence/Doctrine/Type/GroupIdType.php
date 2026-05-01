@@ -10,14 +10,6 @@ class GroupIdType extends StringType
 {
     public const NAME = 'group_id';
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
-    {
-        return $platform->getStringTypeDeclarationSQL([
-            'length' => $column['length'] ?? 39,
-            'fixed' => false,
-        ]);
-    }
-
     public function convertToPHPValue($value, AbstractPlatform $platform): ?GroupId
     {
         return $value !== null ? GroupId::fromString($value) : null;

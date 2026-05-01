@@ -34,6 +34,12 @@ class Group extends AggregateRoot
     public function getRights(): array { return $this->rights->toArray(); }
     public function getProfiles(): array { return $this->profiles->toArray(); }
 
+    public function updateInformation(string $groupName): void
+    {
+        $this->groupName = $groupName;
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     public function addRight(Right $right): void
     {
         if (!$this->rights->contains($right)) {
@@ -42,11 +48,39 @@ class Group extends AggregateRoot
         }
     }
 
+    public function removeRight(Right $right): void
+    {
+        if ($this->rights->contains($right)) {
+            $this->rights->removeElement($right);
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function clearRights(): void
+    {
+        $this->rights->clear();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     public function addProfile(Profile $profile): void
     {
         if (!$this->profiles->contains($profile)) {
             $this->profiles->add($profile);
             $this->updatedAt = new \DateTimeImmutable();
         }
+    }
+
+    public function removeProfile(Profile $profile): void
+    {
+        if ($this->profiles->contains($profile)) {
+            $this->profiles->removeElement($profile);
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function clearProfiles(): void
+    {
+        $this->profiles->clear();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

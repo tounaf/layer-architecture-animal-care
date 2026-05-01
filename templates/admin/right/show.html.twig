@@ -1,0 +1,17 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Détails droit{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title">Détails : {{ right.rightName }}</h4>
+            <a href="{{ path('admin_right_index') }}" class="btn btn-secondary">Retour</a>
+        </div>
+        <div class="card-body">
+            <p><strong>ID :</strong> {{ right.id }}</p>
+            <p><strong>Nom :</strong> {{ right.rightName }}</p>
+            <p><strong>Code :</strong> <code>{{ right.rightCode }}</code></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

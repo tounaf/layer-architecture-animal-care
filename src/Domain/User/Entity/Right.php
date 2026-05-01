@@ -28,4 +28,11 @@ class Right extends AggregateRoot
     public function getRightCode(): string { return $this->rightCode; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getUpdatedAt(): ?\DateTimeImmutable { return $this->updatedAt; }
+
+    public function updateInformation(string $rightName, string $rightCode): void
+    {
+        $this->rightName = $rightName;
+        $this->rightCode = $rightCode;
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 }

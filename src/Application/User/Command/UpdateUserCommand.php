@@ -13,6 +13,7 @@ class UpdateUserCommand
         public bool $isActive,
         public array $groups = [],
         public array $profiles = [],
+        public array $rights = [],
         public ?string $password = null
     ) {
     }

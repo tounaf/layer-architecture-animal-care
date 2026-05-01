@@ -31,11 +31,31 @@ class Profile extends AggregateRoot
     public function getUpdatedAt(): ?\DateTimeImmutable { return $this->updatedAt; }
     public function getRights(): array { return $this->rights->toArray(); }
 
+    public function updateInformation(string $profileName): void
+    {
+        $this->profileName = $profileName;
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     public function addRight(Right $right): void
     {
         if (!$this->rights->contains($right)) {
             $this->rights->add($right);
             $this->updatedAt = new \DateTimeImmutable();
         }
+    }
+
+    public function removeRight(Right $right): void
+    {
+        if ($this->rights->contains($right)) {
+            $this->rights->removeElement($right);
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function clearRights(): void
+    {
+        $this->rights->clear();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
