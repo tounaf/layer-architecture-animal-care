@@ -30,7 +30,7 @@ class CarePrestationFixtures extends Fixture implements DependentFixtureInterfac
                 $carnet = CarnetSante::creer(
                     $animal->getId(),
                     $data[2],
-                    $data[3],
+                    json_encode($data[3]),
                     \DateTimeImmutable::createFromFormat('d/m/Y', $data[1])
                 );
                 $manager->persist($carnet);
