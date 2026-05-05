@@ -32,10 +32,7 @@ class UserFixtures extends Fixture
         $securityUser = new SecurityUser($user);
         $hashedPassword = $this->passwordHasher->hashPassword($securityUser, 'admin');
 
-        $reflection = new \ReflectionClass($user);
-        $property = $reflection->getProperty('password');
-        $property->setAccessible(true);
-        $property->setValue($user, $hashedPassword);
+        $user->updatePassword($hashedPassword);
 
         $manager->persist($user);
         $manager->flush();
