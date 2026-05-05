@@ -20,18 +20,23 @@
                 <table class="table table-vcenter card-table">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Rendez-vous ID</th>
+                            <th>Date Réalisation</th>
+                            <th>Client</th>
+                            <th>Rendez-vous (Plage)</th>
+                            <th>Service</th>
                             <th>Coût Total</th>
                             <th>Statut</th>
                             <th class="w-1"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for prestation in prestations %}
+                        {% for item in enhancedPrestations %}
+                            {% set prestation = item.prestation %}
                             <tr>
                                 <td>{{ prestation.dateRealisation|date('d/m/Y H:i') }}</td>
-                                <td>{{ prestation.rendezVousId }}</td>
+                                <td>{{ item.clientName }}</td>
+                                <td>{{ item.plageHoraire }}</td>
+                                <td>{{ item.serviceName }}</td>
                                 <td>{{ prestation.coutTotal }} EUR</td>
                                 <td><span class="badge bg-green">{{ prestation.statut }}</span></td>
                                 <td>
@@ -39,7 +44,7 @@
                                 </td>
                             </tr>
                         {% else %}
-                            <tr><td colspan="5" class="text-center">Aucune prestation enregistrée</td></tr>
+                            <tr><td colspan="7" class="text-center">Aucune prestation enregistrée</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>

@@ -9,11 +9,6 @@
             <div class="col">
                 <h2 class="page-title">Rendez-vous</h2>
             </div>
-            {# <div class="col-auto ms-auto">
-                <a href="{{ path('admin_rendezvous_new') }}" class="btn btn-primary">
-                    Nouveau RDV
-                </a>
-            </div> #}
         </div>
     </div>
 </div>
@@ -34,7 +29,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for rdv in rendezVousList %}
+                        {% for item in enhancedRdvList %}
+                            {% set rdv = item.rdv %}
                             <tr>
                                 <td>
                                     {{ rdv.dateRdv|date('d/m/Y') }}
@@ -43,10 +39,10 @@
                                     {{ rdv.plageHoraire.debut }} - {{ rdv.plageHoraire.fin }}
                                 </td>
                                 <td>
-                                    {{ rdv.clientId }}
+                                    {{ item.clientName }}
                                 </td>
                                 <td>
-                                    {{ rdv.animalId }}
+                                    {{ item.animalName }}
                                 </td>
                                 <td>
                                     {% if rdv.statut.value == 'en_attente' %}
@@ -61,30 +57,12 @@
                                 </td>
                                 <td>
                                     <div class="btn-list flex-nowrap">
-                                        
-                                        {# <a href="{{ path('admin_rendezvous_show', {id: rdv.id}) }}" class="btn btn-white btn-sm">
-                                            Voir
-                                        </a>
-
-                                        <a href="{{ path('admin_rendezvous_edit', {id: rdv.id}) }}" class="btn btn-white btn-sm">
-                                            Modifier
-                                        </a> #}
-
-                                        {# 👉 Bouton conditionnel #}
                                         {% if rdv.statut.value == 'en_attente' %}
                                             <a href="{{ path('admin_prestation_new_from_rdv', {rdvId: rdv.id}) }}"
                                             class="btn btn-primary btn-sm">
                                                 Créer prestation
                                             </a>
                                         {% endif %}
-
-                                        {# <form method="post"
-                                            action="{{ path('admin_rendezvous_delete', {id: rdv.id}) }}"
-                                            onsubmit="return confirm('Êtes-vous sûr ?');">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rdv.id) }}">
-                                            <button class="btn btn-danger btn-sm">Supprimer</button>
-                                        </form> #}
-
                                     </div>
                                 </td>
                             </tr>

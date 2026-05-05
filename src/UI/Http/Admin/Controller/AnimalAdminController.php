@@ -7,6 +7,7 @@ use Application\Animal\Command\ModifierAnimalCommand;
 use Application\Animal\Handler\CreerAnimalHandler;
 use Application\Animal\Handler\ModifierAnimalHandler;
 use Domain\Animal\Repository\AnimalRepositoryInterface;
+use Domain\Client\Repository\ClientRepositoryInterface;
 use Domain\Shared\ValueObject\AnimalId;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +19,34 @@ use UI\Http\Admin\Form\AnimalType;
 class AnimalAdminController extends AbstractController
 {
     public function __construct(
-        private AnimalRepositoryInterface $repository
+        private AnimalRepositoryInterface $repository,
+        private ClientRepositoryInterface $clientRepository
     ) {
     }
 
     #[Route('', name: 'index')]
     public function index(): Response
     {
+        $animals = $this->repository->findAll();
+        $enhancedAnimals = [];
+
+        foreach ($animals as $animal) {
+            $proprietaireName = 'Inconnu';
+            if ($animal->getProprietaireId()) {
+                $client = $this->clientRepository->findById($animal->getProprietaireId());
+                if ($client) {
+                    $proprietaireName = $client->getPrenom() . ' ' . $client->getNom();
+                }
+            }
+
+            $enhancedAnimals[] = [
+                'animal' => $animal,
+                'proprietaireName' => $proprietaireName
+            ];
+        }
+
         return $this->render('admin/animal/index.html.twig', [
-            'animals' => $this->repository->findAll()
+            'enhancedAnimals' => $enhancedAnimals
         ]);
     }
 
@@ -66,8 +86,17 @@ class AnimalAdminController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        $proprietaireInfo = 'Inconnu';
+        if ($animal->getProprietaireId()) {
+            $client = $this->clientRepository->findById($animal->getProprietaireId());
+            if ($client) {
+                $proprietaireInfo = $client->getPrenom() . ' ' . $client->getNom() . ' (' . $client->getEmail() . ')';
+            }
+        }
+
         return $this->render('admin/animal/show.html.twig', [
-            'animal' => $animal
+            'animal' => $animal,
+            'proprietaireInfo' => $proprietaireInfo
         ]);
     }
 
