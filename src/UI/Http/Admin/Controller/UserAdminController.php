@@ -39,6 +39,7 @@ class UserAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+
             $groupIds = array_map(fn($g) => (string)$g->getId(), $data['groups']->toArray());
             $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']->toArray());
             $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']->toArray());
@@ -89,10 +90,10 @@ class UserAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            
-            $groupIds = array_map(fn($g) => (string)$g->getId(), $data['groups']);
-            $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']);
-            $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']);
+
+            $groupIds = array_map(fn($g) => (string)$g->getId(), $data['groups']->toArray());
+            $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']->toArray());
+            $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']->toArray());
 
             $command = new UpdateUserCommand(
                 $id,

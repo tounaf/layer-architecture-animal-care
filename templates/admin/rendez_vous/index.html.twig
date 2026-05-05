@@ -9,11 +9,6 @@
             <div class="col">
                 <h2 class="page-title">Rendez-vous</h2>
             </div>
-            {# <div class="col-auto ms-auto">
-                <a href="{{ path('admin_rendezvous_new') }}" class="btn btn-primary">
-                    Nouveau RDV
-                </a>
-            </div> #}
         </div>
     </div>
 </div>
@@ -34,7 +29,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for rdv in rendezVousList %}
+                        {% for item in enhancedRdvList %}
+                            {% set rdv = item.rdv %}
                             <tr>
                                 <td>
                                     {{ rdv.dateRdv|date('d/m/Y') }}
@@ -43,10 +39,10 @@
                                     {{ rdv.plageHoraire.debut }} - {{ rdv.plageHoraire.fin }}
                                 </td>
                                 <td>
-                                    {{ rdv.clientId }}
+                                    {{ item.clientName }}
                                 </td>
                                 <td>
-                                    {{ rdv.animalId }}
+                                    {{ item.animalName }}
                                 </td>
                                 <td>
                                     {% if rdv.statut.value == 'en_attente' %}

@@ -9,7 +9,6 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Suivi Médical (CARE)</h4>
-                    <button class="btn btn-primary btn-sm">Nouveau Carnet</button>
                 </div>
                 <div class="card-body">
                     <p>Interface de gestion des carnets de santé.</p>
@@ -17,12 +16,25 @@
                         <thead>
                             <tr>
                                 <th>Animal</th>
-                                <th>Dernière Mise à jour</th>
+                                <th>Client (Propriétaire)</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Liste des carnets -->
+                            {% for item in enhancedCarnets %}
+                                <tr>
+                                    <td>{{ item.animalName }}</td>
+                                    <td>{{ item.clientName }}</td>
+                                    <td>
+                                        {# Pour l'instant pas de vue de détail implémentée, mais on pourrait #}
+                                        <button class="btn btn-sm btn-info">Voir l'historique</button>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center">Aucun carnet de santé trouvé</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
