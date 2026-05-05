@@ -15,9 +15,10 @@ final class {{ name }}MenuProvider implements MenuProviderInterface
                 icon: 'ti ti-box',
                 routeName: '{{ context_lower }}_{{ name_lower }}_index',
                 routePrefix: '{{ context_lower }}_{{ name_lower }}_',
+                priority: 0,
                 children: [
-                    new MenuItem('Liste', null, '{{ context_lower }}_{{ name_lower }}_index'),
-                    // new MenuItem('Nouveau', null, '{{ context_lower }}_{{ name_lower }}_new'),
+                    new MenuItem(label: 'Liste', routeName: '{{ context_lower }}_{{ name_lower }}_index', priority: 0),
+                    // new MenuItem(label: 'Nouveau', routeName: '{{ context_lower }}_{{ name_lower }}_new', priority: 0),
                 ]
             ),
         ];

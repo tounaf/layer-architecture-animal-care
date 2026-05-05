@@ -13,4 +13,5 @@ interface UserRepositoryInterface
     public function findByMail(string $mail): ?User;
     public function findAll(): array;
     public function delete(User $user): void;
+    public function countAll(): int;
 }

@@ -46,4 +46,9 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
         $this->getEntityManager()->remove($user);
         $this->getEntityManager()->flush();
     }
+
+    public function countAll(): int
+    {
+        return $this->count([]);
+    }
 }

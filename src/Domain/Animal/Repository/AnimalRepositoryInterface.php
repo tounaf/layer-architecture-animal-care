@@ -15,4 +15,7 @@ interface AnimalRepositoryInterface
     /** @return Animal[] */
     public function findByProprietaire(ClientId $clientId): array;
     public function delete(Animal $animal): void;
+    public function countAll(): int;
+    /** @return array<string, int> */
+    public function getSpeciesRepartition(): array;
 }
