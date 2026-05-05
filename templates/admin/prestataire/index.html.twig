@@ -5,13 +5,15 @@
 {% block body %}
 <div class="page-header d-print-none">
     <div class="container-xl">
-        <div class="row g-2 align-items-center">
+        <div class="row g-3 align-items-center">
             <div class="col">
-                <h2 class="page-title">Prestataires</h2>
+                <h2 class="page-title">
+                    <i class="ti ti-users me-2"></i>Prestataires
+                </h2>
             </div>
-            <div class="col-auto ms-auto">
+            <div class="col-auto">
                 <a href="{{ path('admin_prestataire_new') }}" class="btn btn-primary">
-                    Nouveau Prestataire
+                    <i class="ti ti-plus me-2"></i>Nouveau Prestataire
                 </a>
             </div>
         </div>
@@ -21,42 +23,88 @@
 <div class="page-body">
     <div class="container-xl">
         <div class="card">
+            <!-- Header avec recherche et filtres -->
+            <div class="card-header">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="ti ti-search"></i>
+                            </span>
+                            <input type="text" id="search" class="form-control" placeholder="Rechercher un prestataire...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="statusFilter" class="form-select">
+                            <option value="">Tous les statuts</option>
+                            <option value="validé">Validé</option>
+                            <option value="en attente">En attente</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div class="table-responsive">
-                <table class="table table-vcenter card-table">
+                <table class="table table-vcenter card-table table-hover" id="prestatairesTable">
                     <thead>
                         <tr>
                             <th>Structure</th>
                             <th>Contact</th>
                             <th>Profession</th>
                             <th>Statut</th>
-                            <th class="w-1"></th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for prestataire in prestataires %}
                             <tr>
-                                <td><a href="{{ path('admin_prestataire_show', {id: prestataire.id}) }}">{{ prestataire.nomStructure }}</a></td>
-                                <td>{{ prestataire.nomContact }} {{ prestataire.prenomContact }}</td>
-                                <td>{{ prestataire.profession }}</td>
                                 <td>
-                                    {% if prestataire.isValideParAdmin %}
-                                        <span class="badge bg-success">Validé</span>
-                                    {% else %}
-                                        <span class="badge bg-warning">En attente</span>
-                                    {% endif %}
+                                    <a href="{{ path('admin_prestataire_show', {id: prestataire.id}) }}" class="text-blue">
+                                        <strong>{{ prestataire.nomStructure }}</strong>
+                                    </a>
                                 </td>
                                 <td>
-                                    <div class="btn-list flex-nowrap">
-                                        <a href="{{ path('admin_prestataire_edit', {id: prestataire.id}) }}" class="btn btn-white btn-sm">Modifier</a>
-                                        <form method="post" action="{{ path('admin_prestataire_delete', {id: prestataire.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                    {{ prestataire.nomContact }} {{ prestataire.prenomContact }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ prestataire.profession|default('Non renseigné') }}</span>
+                                </td>
+                                <td>
+                                    {% if prestataire.isValideParAdmin %}
+                                        <span class="badge bg-success">
+                                            <i class="ti ti-check me-1"></i>Validé
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-warning">
+                                            <i class="ti ti-clock me-1"></i>En attente
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-list justify-content-end">
+                                        <a href="{{ path('admin_prestataire_edit', {id: prestataire.id}) }}" 
+                                           class="btn btn-sm btn-icon btn-white" title="Modifier">
+                                            <i class="ti ti-edit"></i>
+                                        </a>
+                                        <form method="post" 
+                                              action="{{ path('admin_prestataire_delete', {id: prestataire.id}) }}" 
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce prestataire ? Cette action est irréversible.');"
+                                              style="display: inline;">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ prestataire.id) }}">
-                                            <button class="btn btn-danger btn-sm">Supprimer</button>
+                                            <button type="submit" class="btn btn-sm btn-icon btn-danger" title="Supprimer">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         {% else %}
-                            <tr><td colspan="5" class="text-center">Aucun prestataire trouvé</td></tr>
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <i class="ti ti-users text-muted" style="font-size: 3rem;"></i>
+                                    <p class="text-muted mt-3">Aucun prestataire trouvé</p>
+                                </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -64,4 +112,36 @@
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search');
+    const statusFilter = document.getElementById('statusFilter');
+    const tableRows = document.querySelectorAll('#prestatairesTable tbody tr');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value.toLowerCase();
+
+        tableRows.forEach(row => {
+            if (row.cells.length < 4) return; // Skip empty state row
+            
+            const structure = row.cells[0].textContent.toLowerCase();
+            const contact = row.cells[1].textContent.toLowerCase();
+            const statusBadge = row.cells[3].textContent.toLowerCase();
+
+            const matchesSearch = structure.includes(searchTerm) || contact.includes(searchTerm);
+            const matchesStatus = statusValue === '' || statusBadge.includes(statusValue);
+
+            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+        });
+    }
+
+    searchInput.addEventListener('keyup', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+});
+</script>
 {% endblock %}
