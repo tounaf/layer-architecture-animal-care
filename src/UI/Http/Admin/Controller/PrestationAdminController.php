@@ -11,6 +11,8 @@ use Domain\RendezVous\ValueObject\RendezVousId;
 use Domain\Prestataire\Repository\ServiceProposeRepositoryInterface;
 use Domain\Service\Repository\ServiceRepositoryInterface;
 use Domain\Service\Repository\ServiceChampRepositoryInterface;
+use Domain\Client\Repository\ClientRepositoryInterface;
+use Domain\Animal\Repository\AnimalRepositoryInterface;
 use Infrastructure\File\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,15 +27,50 @@ class PrestationAdminController extends AbstractController
         private RendezVousRepositoryInterface $rendezVousRepository,
         private ServiceProposeRepositoryInterface $serviceProposeRepository,
         private ServiceRepositoryInterface $serviceRepository,
-        private ServiceChampRepositoryInterface $champRepository
+        private ServiceChampRepositoryInterface $champRepository,
+        private ClientRepositoryInterface $clientRepository,
+        private AnimalRepositoryInterface $animalRepository
     ) {
     }
 
     #[Route('', name: 'index')]
     public function index(): Response
     {
+        $prestations = $this->repository->findAll();
+        $enhancedPrestations = [];
+
+        foreach ($prestations as $prestation) {
+            $rdv = $this->rendezVousRepository->findById($prestation->getRendezVousId());
+            $clientName = 'Client inconnu';
+            $plageHoraire = 'N/A';
+
+            if ($rdv) {
+                $client = $this->clientRepository->findById($rdv->getClientId());
+                if ($client) {
+                    $clientName = $client->getPrenom() . ' ' . $client->getNom();
+                }
+                $plageHoraire = $rdv->getDateRdv()->format('d/m/Y') . ' (' . $rdv->getPlageHoraire()->getDebut() . ' - ' . $rdv->getPlageHoraire()->getFin() . ')';
+            }
+
+            $servicePropose = $this->serviceProposeRepository->findById($prestation->getServiceProposeId());
+            $serviceName = 'Service inconnu';
+            if ($servicePropose) {
+                $service = $this->serviceRepository->findById($servicePropose->getServiceId());
+                if ($service) {
+                    $serviceName = $service->getNom();
+                }
+            }
+
+            $enhancedPrestations[] = [
+                'prestation' => $prestation,
+                'clientName' => $clientName,
+                'plageHoraire' => $plageHoraire,
+                'serviceName' => $serviceName
+            ];
+        }
+
         return $this->render('admin/prestation/index.html.twig', [
-            'prestations' => $this->repository->findAll()
+            'enhancedPrestations' => $enhancedPrestations
         ]);
     }
 
@@ -49,10 +86,25 @@ class PrestationAdminController extends AbstractController
         $servicePropose = $this->serviceProposeRepository->findById($prestation->getServiceProposeId());
         $service = $this->serviceRepository->findById($servicePropose->getServiceId());
 
+        $clientInfo = 'Inconnu';
+        $animalInfo = 'Inconnu';
+        if ($rdv) {
+            $client = $this->clientRepository->findById($rdv->getClientId());
+            if ($client) {
+                $clientInfo = $client->getPrenom() . ' ' . $client->getNom() . ' (' . $client->getEmail() . ')';
+            }
+            $animal = $this->animalRepository->findById($rdv->getAnimalId());
+            if ($animal) {
+                $animalInfo = $animal->getNom() . ' (' . ($animal->getEspece() ?: 'Espèce inconnue') . ')';
+            }
+        }
+
         return $this->render('admin/prestation/show.html.twig', [
             'prestation' => $prestation,
             'rdv' => $rdv,
             'service' => $service,
+            'clientInfo' => $clientInfo,
+            'animalInfo' => $animalInfo,
             'champs' => $this->champRepository->findAll()
         ]);
     }

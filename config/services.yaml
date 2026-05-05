@@ -14,6 +14,10 @@ services:
         resource: '../src/Application/RendezVous/Handler/'
         tags: ['messenger.message_handler']
 
+    Application\User\Handler\:
+        resource: '../src/Application/User/Handler/'
+        tags: ['messenger.message_handler']
+
     Infrastructure\:
         resource: '../src/Infrastructure/'
         exclude: '../src/Infrastructure/File/'
@@ -38,3 +42,7 @@ services:
     Domain\Service\Repository\ServiceRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceRepository'
     Domain\Service\Repository\ServiceCategorieRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceCategorieRepository'
     Domain\Service\Repository\ServiceChampRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineServiceChampRepository'
+    Domain\User\Repository\UserRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineUserRepository'
+    Domain\User\Repository\GroupRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineGroupRepository'
+    Domain\User\Repository\ProfileRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineProfileRepository'
+    Domain\User\Repository\RightRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineRightRepository'

@@ -1,0 +1,51 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Nouvel utilisateur{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Nouvel utilisateur</h4>
+                    <a href="{{ path('admin_user_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-md-6">{{ form_row(form.login) }}</div>
+                            <div class="col-md-6">{{ form_row(form.mail) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">{{ form_row(form.lastname) }}</div>
+                            <div class="col-md-6">{{ form_row(form.firstname) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">{{ form_row(form.password) }}</div>
+                            <div class="col-md-6">{{ form_row(form.isActive) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5>Groupes</h5>
+                                {{ form_widget(form.groups) }}
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Profils</h5>
+                                {{ form_widget(form.profiles) }}
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Droits directs</h5>
+                                {{ form_widget(form.rights) }}
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success">Créer l'utilisateur</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

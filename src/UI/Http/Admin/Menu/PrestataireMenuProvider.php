@@ -14,6 +14,7 @@ final class PrestataireMenuProvider implements MenuProviderInterface
                 label: 'Prestataires',
                 icon: 'ti ti-building-hospital',
                 routeName: 'admin_prestataire_index',
+                routePrefix: 'admin_prestataire_',
                 children: [
                     new MenuItem('Liste', null, 'admin_prestataire_index'),
                     new MenuItem('Nouveau', null, 'admin_prestataire_new'),

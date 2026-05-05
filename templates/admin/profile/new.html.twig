@@ -1,0 +1,16 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Nouveau profil{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header"><h4 class="card-title">Nouveau profil</h4></div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                {{ form_row(form.profileName) }}
+                {{ form_row(form.rights) }}
+                <button class="btn btn-success mt-3">Créer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

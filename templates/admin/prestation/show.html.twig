@@ -9,6 +9,9 @@
             <div class="col">
                 <h2 class="page-title">Prestation du {{ prestation.dateRealisation|date('d/m/Y') }}</h2>
             </div>
+            <div class="col-auto ms-auto">
+                <a href="{{ path('admin_prestation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
         </div>
     </div>
 </div>
@@ -18,11 +21,30 @@
         <div class="row row-cards">
             <div class="col-md-4">
                 <div class="card">
+                    <div class="card-header"><h3 class="card-title">Informations Générales</h3></div>
                     <div class="card-body">
                         <div class="datagrid">
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Service effectué</div>
                                 <div class="datagrid-content">{{ service.nom }}</div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Client</div>
+                                <div class="datagrid-content">{{ clientInfo }}</div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Animal</div>
+                                <div class="datagrid-content">{{ animalInfo }}</div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Date Rendez-vous</div>
+                                <div class="datagrid-content">
+                                    {% if rdv %}
+                                        {{ rdv.dateRdv|date('d/m/Y') }} ({{ rdv.plageHoraire.debut }} - {{ rdv.plageHoraire.fin }})
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Coût total</div>
@@ -42,8 +64,14 @@
                     <div class="card-body">
                         <div class="datagrid">
                             {% for valeur in prestation.valeursChamps %}
+                                {% set currentChamp = null %}
+                                {% for c in champs %}
+                                    {% if c.id == valeur.serviceChampId %}
+                                        {% set currentChamp = c %}
+                                    {% endif %}
+                                {% endfor %}
                                 <div class="datagrid-item">
-                                    <div class="datagrid-title">Champ ID: {{ valeur.serviceChampId }}</div>
+                                    <div class="datagrid-title">{{ currentChamp ? currentChamp.nom : 'Champ ID: ' ~ valeur.serviceChampId }}</div>
                                     <div class="datagrid-content">
                                         {% if valeur.typeValeur == 'fichier' %}
                                             <a href="{{ valeur.valeur }}" target="_blank" class="btn btn-sm btn-white">

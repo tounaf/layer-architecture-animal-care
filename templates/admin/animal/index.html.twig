@@ -34,15 +34,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for animal in animals %}
+                        {% for item in enhancedAnimals %}
+                            {% set animal = item.animal %}
                             <tr>
                                 <td>{{ animal.nom }}</td>
-                                <td>{{ animal.espece }} / {{ animal.race }}</td>
+                                <td>{{ animal.espece ?: 'N/A' }} / {{ animal.race ?: 'N/A' }}</td>
                                 <td>{{ animal.dateNaissance ? animal.dateNaissance|date('d/m/Y') : '-' }}</td>
-                                <td>{{ animal.poids }}</td>
-                                <td>{{ animal.proprietaireId }}</td>
+                                <td>{{ animal.poids ?: '-' }}</td>
+                                <td>{{ item.proprietaireName }}</td>
                                 <td>
                                     <div class="btn-list flex-nowrap">
+                                        <a href="{{ path('admin_animal_show', {id: animal.id}) }}" class="btn btn-white btn-sm">Détails</a>
                                         <a href="{{ path('admin_animal_edit', {id: animal.id}) }}" class="btn btn-white btn-sm">Modifier</a>
                                         <form method="post" action="{{ path('admin_animal_delete', {id: animal.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ animal.id) }}">

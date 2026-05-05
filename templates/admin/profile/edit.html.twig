@@ -1,0 +1,16 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Modifier profil{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header"><h4 class="card-title">Modifier : {{ profile.profileName }}</h4></div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                {{ form_row(form.profileName) }}
+                {{ form_row(form.rights) }}
+                <button class="btn btn-primary mt-3">Enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -14,6 +14,8 @@ final class PrestationMenuProvider implements MenuProviderInterface
                 label: 'Prestations',
                 icon: 'ti ti-building-hospital',
                 routeName: 'admin_prestation_index',
+                routePrefix: 'admin_prestation_',
+                priority: 8,
                 children: [
                     new MenuItem('Liste', null, 'admin_prestation_index'),
                 ]

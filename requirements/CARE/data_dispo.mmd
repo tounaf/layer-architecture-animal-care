@@ -1,0 +1,32 @@
+graph LR
+    subgraph "<font size='2' >DONNÉES DISPONIBLES POUR PROPRIETAIRE</font>"
+            
+            A[Propriétaire consulte<br/>son animal]
+            
+            B[Informations générales<br/>Nom, âge, race, actif/décédé]
+            
+            C[État actuel<br/>Poids, température<br/>Alertes, traitements]
+            
+            D[Historique complet<br/>Tous services effectués<br/>Chronologique]
+            
+            E[Prochains services<br/>Rappels<br/>Rendez-vous prévus]
+            
+            F[Prestataires<br/>Tous les suivis<br/>Dernier prestataire]
+            
+            G[Détails consultation<br/>Diagnostic<br/>Médicaments prescrits<br/>Documents]
+            
+            A --> B
+            A --> C
+            A --> D
+            A --> E
+            A --> F
+            A --> G
+    end
+    
+    style A fill:#bbdfb,stroke:#0d47a1
+    style B fill:#c86c9,stroke:#1b5e20
+    style C fill:#fecb3,stroke:#ff6f00
+    style D fill:#fe0b2,stroke:#e65100
+    style E fill:#ed5e7,stroke:#4a148c
+    style F fill:#dc4e9,stroke:#311b92
+    style G fill:#fcdd2,stroke:#b71c1c

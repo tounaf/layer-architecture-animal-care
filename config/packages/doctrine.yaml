@@ -21,6 +21,12 @@ doctrine:
             prestation_id: Infrastructure\Persistence\Doctrine\Type\PrestationIdType
             service_champ_id: Infrastructure\Persistence\Doctrine\Type\ServiceChampIdType
             document_id: Infrastructure\Persistence\Doctrine\Type\DocumentIdType
+            user_id: Infrastructure\Persistence\Doctrine\Type\UserIdType
+            group_id: Infrastructure\Persistence\Doctrine\Type\GroupIdType
+            profile_id: Infrastructure\Persistence\Doctrine\Type\ProfileIdType
+            right_id: Infrastructure\Persistence\Doctrine\Type\RightIdType
+            action_id: Infrastructure\Persistence\Doctrine\Type\ActionIdType
+            history_id: Infrastructure\Persistence\Doctrine\Type\HistoryIdType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -83,6 +89,12 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/document'
                 prefix: 'Domain\Document\Entity'
                 alias: Document
+            User:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine/user'
+                prefix: 'Domain\User\Entity'
+                alias: User
         controller_resolver:
             auto_mapping: false
 

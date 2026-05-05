@@ -29,4 +29,21 @@ final class DoctrineRendezVousRepository implements RendezVousRepositoryInterfac
     {
         return $this->entityManager->getRepository(RendezVous::class)->findAll();
     }
+
+    public function countUpcoming(): int
+    {
+        return (int) $this->entityManager
+            ->createQuery('SELECT COUNT(r.id) FROM Domain\RendezVous\Entity\RendezVous r WHERE r.dateRdv >= :today')
+            ->setParameter('today', new \DateTimeImmutable('today'))
+            ->getSingleScalarResult();
+    }
+
+    public function findUpcoming(int $limit = 5): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT r FROM Domain\RendezVous\Entity\RendezVous r WHERE r.dateRdv >= :today ORDER BY r.dateRdv ASC, r.plageHoraire.debut ASC')
+            ->setParameter('today', new \DateTimeImmutable('today'))
+            ->setMaxResults($limit)
+            ->getResult();
+    }
 }

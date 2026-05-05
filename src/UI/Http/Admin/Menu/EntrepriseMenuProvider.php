@@ -14,6 +14,7 @@ final class EntrepriseMenuProvider implements MenuProviderInterface
                 label: 'Entreprise',
                 icon: 'ti ti-box',
                 routeName: 'admin_entreprise_index',
+                routePrefix: 'admin_entreprise_',
                 children: [
                     new MenuItem('Liste', null, 'admin_entreprise_index'),
                     // new MenuItem('Nouveau', null, 'admin_entreprise_new'),

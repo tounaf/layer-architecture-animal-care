@@ -1,0 +1,43 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des droits{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title">Droits</h4>
+            <a href="{{ path('admin_right_new') }}" class="btn btn-primary">Nouveau droit</a>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Code</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for right in rights %}
+                    <tr>
+                        <td>{{ right.rightName }}</td>
+                        <td><code>{{ right.rightCode }}</code></td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ path('admin_right_show', {'id': right.id}) }}" class="btn btn-sm btn-info">Détails</a>
+                                <a href="{{ path('admin_right_edit', {'id': right.id}) }}" class="btn btn-sm btn-warning">Editer</a>
+                                <form method="post" action="{{ path('admin_right_delete', {'id': right.id}) }}" onsubmit="return confirm('Supprimer ?');" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ right.id) }}">
+                                    <button class="btn btn-sm btn-danger">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

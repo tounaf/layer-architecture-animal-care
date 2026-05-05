@@ -21,7 +21,38 @@ L'API permet la création de rendez-vous, notamment depuis une application mobil
 
 ---
 
+## 🔄 Cycle de Vie & États
+
+Le rendez-vous suit un flux précis pour garantir la cohérence métier.
+
+### États possibles (`StatutRendezVous`) :
+1.  **En attente** : État initial après création.
+2.  **Confirmé** : Le prestataire a validé le créneau. **Obligatoire** pour pouvoir créer une prestation.
+3.  **Annulé** : Le rendez-vous ne pourra plus être honoré (nécessite un motif).
+4.  **Terminé** : Une prestation a été réalisée pour ce rendez-vous.
+
+### Actions disponibles :
+*   **Confirmer** : Passe de `En attente` à `Confirmé`.
+*   **Annuler** : Peut être fait depuis l'état `En attente` ou `Confirmé`.
+*   **Reporter** : Modifie la date et l'heure. Possible tant que le RDV n'est pas `Terminé`.
+*   **Terminer** : Action automatique lors de la réalisation d'une prestation.
+
+---
+
 ## 🛠️ Couche Application
 
-*   **Commandes** : `CreerRendezVousCommand` (supporte la création à la volée), `ConfirmerRendezVousCommand`.
-*   **Handlers** : `CreerRendezVousHandler` (Orchestre la création Client/Animal/RDV).
+*   **Commandes** : 
+    *   `CreerRendezVousCommand` : Initialisation.
+    *   `ConfirmerRendezVousCommand` : Validation simple.
+    *   `AnnulerRendezVousCommand` : Requiert l'ID et un motif.
+    *   `ReporterRendezVousCommand` : Requiert l'ID, la nouvelle date et l'heure.
+*   **Handlers** : Gèrent la persistence et le dispatch des événements de domaine (`RendezVousConfirme`, `RendezVousAnnule`).
+
+---
+
+## 🖥️ Interface Admin
+
+La liste des rendez-vous (`/admin/rendez-vous`) adapte ses boutons selon l'état :
+*   **Boutons Confirm/Annuler/Reporter** : Visibles pour les rendez-vous en attente.
+*   **Bouton Créer Prestation** : Visible **uniquement** si le statut est `Confirmé`.
+*   **Formulaire de report** : Intégré en ligne (inline) pour une modification rapide sans quitter la liste.

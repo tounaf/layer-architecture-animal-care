@@ -14,6 +14,7 @@ final class ServiceMenuProvider implements MenuProviderInterface
                 label: 'Catalogue',
                 icon: 'ti ti-box',
                 routeName: 'admin_service_index',
+                routePrefix: 'admin_service_',
                 children: [
                     new MenuItem('Services', null, 'admin_service_index'),
                     new MenuItem('Catégories', null, 'admin_service_categorie_index'),

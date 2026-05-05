@@ -19,9 +19,9 @@ class CarePrestationFixtures extends Fixture implements DependentFixtureInterfac
         $animalsByNom = []; foreach($animals as $a) $animalsByNom[$a->getNom()] = $a;
 
         $carnetsData = [
-            ['Médor', '10/05/2020', 'Chien en bonne santé générale', ["groupe_sanguin" => "DEA 1.1", "allergies" => ["puces"], "assurance" => "AXA"]],
-            ['Kitty', '15/03/2022', 'Chatte stérilisée, tendance surpoids', ["groupe_sanguin" => "A", "micropuce" => "250268700123456"]],
-            ['Loulou', '22/08/2021', 'Allergie aux puces, dermatite atopique', ["allergies" => ["puces", "acariens"], "regime" => "hypoallergenique"]],
+            ['Médor', '10/05/2020', 'Chien en bonne santé générale', '["groupe_sanguin" => "DEA 1.1", "allergies" => ["puces"], "assurance" => "AXA"]'],
+            ['Kitty', '15/03/2022', 'Chatte stérilisée, tendance surpoids', '["groupe_sanguin" => "A", "micropuce" => "250268700123456"]'],
+            ['Loulou', '22/08/2021', 'Allergie aux puces, dermatite atopique', '["allergies" => ["puces", "acariens"], "regime" => "hypoallergenique"]'],
         ];
 
         foreach ($carnetsData as $data) {
@@ -30,7 +30,7 @@ class CarePrestationFixtures extends Fixture implements DependentFixtureInterfac
                 $carnet = CarnetSante::creer(
                     $animal->getId(),
                     $data[2],
-                    $data[3],
+                    json_encode($data[3]),
                     \DateTimeImmutable::createFromFormat('d/m/Y', $data[1])
                 );
                 $manager->persist($carnet);

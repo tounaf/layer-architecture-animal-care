@@ -10,7 +10,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <h5 class="text-muted fs-13 text-uppercase">Total Utilisateurs</h5>
-                            <h3 class="mb-0 fw-bold">1,245</h3>
+                            <h3 class="mb-0 fw-bold" id="stat-users">...</h3>
                         </div>
                         <div class="avatar-md flex-shrink-0">
                             <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-22">
@@ -28,7 +28,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <h5 class="text-muted fs-13 text-uppercase">Rendez-vous à venir</h5>
-                            <h3 class="mb-0 fw-bold">42</h3>
+                            <h3 class="mb-0 fw-bold" id="stat-appointments">...</h3>
                         </div>
                         <div class="avatar-md flex-shrink-0">
                             <span class="avatar-title bg-success-subtle text-success rounded-circle fs-22">
@@ -39,18 +39,123 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12">
+        <div class="col-xxl-3 col-md-6">
             <div class="card">
-                <div class="card-header border-bottom border-dashed d-flex align-items-center">
-                    <h4 class="header-title flex-grow-1">Bienvenue dans l'administration</h4>
-                </div>
                 <div class="card-body">
-                    <p>Ceci est votre nouveau tableau de bord utilisant le template Osen intégré avec succès.</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="text-muted fs-13 text-uppercase">Total Animaux</h5>
+                            <h3 class="mb-0 fw-bold" id="stat-animals">...</h3>
+                        </div>
+                        <div class="avatar-md flex-shrink-0">
+                            <span class="avatar-title bg-warning-subtle text-warning rounded-circle fs-22">
+                                <i class="ti ti-dog"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header border-bottom border-dashed d-flex align-items-center">
+                    <h4 class="header-title flex-grow-1">Prochains Rendez-vous</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-nowrap table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Animal</th>
+                                    <th>Date</th>
+                                    <th>Heure</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcoming-appointments-list">
+                                <tr>
+                                    <td colspan="5" class="text-center">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header border-bottom border-dashed">
+                    <h4 class="header-title">Répartition par Espèce</h4>
+                </div>
+                <div class="card-body">
+                    <div id="species-repartition-chart" style="min-height: 250px;">
+                        <p class="text-center text-muted">Chargement des données...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch KPIs
+            fetch('{{ path('api_admin_dashboard_kpis') }}')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('stat-users').innerText = data.total_users;
+                    document.getElementById('stat-appointments').innerText = data.upcoming_appointments;
+                    document.getElementById('stat-animals').innerText = data.total_animals;
+                });
+
+            // Fetch Upcoming Appointments
+            fetch('{{ path('api_admin_dashboard_upcoming_appointments') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById('upcoming-appointments-list');
+                    if (data.length === 0) {
+                        list.innerHTML = '<tr><td colspan="5" class="text-center">Aucun rendez-vous à venir</td></tr>';
+                        return;
+                    }
+                    list.innerHTML = '';
+                    data.forEach(rdv => {
+                        list.innerHTML += `
+                            <tr>
+                                <td>${rdv.client}</td>
+                                <td>${rdv.animal}</td>
+                                <td>${rdv.date}</td>
+                                <td>${rdv.time}</td>
+                                <td>
+                                    <a href="/admin/rendez-vous/${rdv.id}" class="btn btn-sm btn-light">Voir</a>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                });
+
+            // Fetch Species Repartition
+            fetch('{{ path('api_admin_dashboard_species_repartition') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('species-repartition-chart');
+                    if (Object.keys(data).length === 0) {
+                        container.innerHTML = '<p class="text-center text-muted">Aucune donnée disponible</p>';
+                        return;
+                    }
+                    container.innerHTML = '<ul>';
+                    for (const [species, count] of Object.entries(data)) {
+                        container.innerHTML += `<li><strong>${species}</strong>: ${count}</li>`;
+                    }
+                    container.innerHTML += '</ul>';
+                });
+        });
+    </script>
 {% endblock %}
