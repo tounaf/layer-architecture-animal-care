@@ -14,6 +14,8 @@ use Domain\Care\Repository\CarnetSanteRepositoryInterface;
 use Domain\Care\Enum\TypeEntree;
 use Domain\Document\Entity\Document;
 use Domain\Document\Repository\DocumentRepositoryInterface;
+use Domain\Medicament\Repository\MedicamentRepositoryInterface;
+use Domain\Medicament\ValueObject\MedicamentId;
 use Application\Shared\Bus\EventBusInterface;
 
 final class RealiserPrestationHandler
@@ -23,6 +25,7 @@ final class RealiserPrestationHandler
         private RendezVousRepositoryInterface $rendezVousRepository,
         private CarnetSanteRepositoryInterface $carnetSanteRepository,
         private DocumentRepositoryInterface $documentRepository,
+        private MedicamentRepositoryInterface $medicamentRepository,
         private EventBusInterface $eventBus
     ) {
     }
@@ -69,6 +72,21 @@ final class RealiserPrestationHandler
         }
 
         $this->prestationRepository->save($prestation);
+
+        // Dispatch events de prestation (ex: PrestationRealisee)
+        foreach ($prestation->getEvents() as $event) {
+            $this->eventBus->dispatch($event);
+        }
+        $prestation->clearEvents();
+
+        // Gérer les médicaments prescrits
+        foreach ($command->prescriptions as $prescription) {
+            $medicament = $this->medicamentRepository->findById(MedicamentId::fromString($prescription['medicamentId']));
+            if ($medicament) {
+                $medicament->prescrire((int)$prescription['quantite']);
+                $this->medicamentRepository->save($medicament);
+            }
+        }
 
         // Gérer le carnet de santé
         $animalId = $rdv->getAnimalId();

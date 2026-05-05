@@ -33,6 +33,33 @@
             </div>
 
             <div class="card mt-3">
+                <div class="card-header"><h3 class="card-title">Médicaments prescrits</h3></div>
+                <div class="card-body">
+                    <div id="prescriptions-container">
+                        <div class="row mb-2 prescription-row">
+                            <div class="col-md-8">
+                                <select name="med_ids[]" class="form-select">
+                                    <option value="">-- Choisir un médicament --</option>
+                                    {% for med in medicaments %}
+                                        <option value="{{ med.id }}">{{ med.nom }} (Stock: {{ med.stockActuel }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" name="med_qtys[]" class="form-control" placeholder="Qté">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-icon btn-danger remove-prescription"><i class="ti ti-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="add-prescription" class="btn btn-sm btn-outline-primary mt-2">
+                        <i class="ti ti-plus me-1"></i> Ajouter un autre médicament
+                    </button>
+                </div>
+            </div>
+
+            <div class="card mt-3">
                 <div class="card-header"><h3 class="card-title">Champs spécifiques au service</h3></div>
                 <div class="card-body">
                     {% for champ in champs %}
@@ -63,4 +90,33 @@
         </form>
     </div>
 </div>
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('prescriptions-container');
+    const addButton = document.getElementById('add-prescription');
+
+    addButton.addEventListener('click', function() {
+        const firstRow = container.querySelector('.prescription-row');
+        const newRow = firstRow.cloneNode(true);
+        newRow.querySelector('select').value = '';
+        newRow.querySelector('input').value = '';
+        container.appendChild(newRow);
+    });
+
+    container.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-prescription')) {
+            const rows = container.querySelectorAll('.prescription-row');
+            if (rows.length > 1) {
+                e.target.closest('.prescription-row').remove();
+            } else {
+                const row = rows[0];
+                row.querySelector('select').value = '';
+                row.querySelector('input').value = '';
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Factures{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-3 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    <i class="ti ti-file-invoice me-2"></i>Factures
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Numéro</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Montant HT</th>
+                            <th>TVA</th>
+                            <th>Montant TTC</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in enhancedFactures %}
+                            {% set facture = item.facture %}
+                            <tr>
+                                <td><strong>{{ facture.numeroFacture }}</strong></td>
+                                <td>{{ facture.createdAt|date('d/m/Y H:i') }}</td>
+                                <td>{{ item.clientName }}</td>
+                                <td>{{ facture.montantHT|number_format(2, ',', ' ') }} EUR</td>
+                                <td>{{ facture.tva|number_format(2, ',', ' ') }} EUR</td>
+                                <td><strong>{{ facture.montantTTC|number_format(2, ',', ' ') }} EUR</strong></td>
+                                <td>
+                                    <span class="badge {{ facture.statut.value == 'payee' ? 'bg-success' : 'bg-warning' }}">
+                                        {{ facture.statut.value|replace({'_': ' '})|capitalize }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <p class="text-muted">Aucune facture trouvée</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

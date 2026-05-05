@@ -10,6 +10,7 @@ use Domain\RendezVous\ValueObject\RendezVousId;
 use Domain\Prestataire\ValueObject\ServiceProposeId;
 use Domain\Service\ValueObject\ServiceChampId;
 use Domain\Document\ValueObject\DocumentId;
+use Domain\Prestation\Event\PrestationRealisee;
 
 class Prestation extends AggregateRoot
 {
@@ -33,13 +34,17 @@ class Prestation extends AggregateRoot
         \DateTimeInterface $dateRealisation,
         float $coutTotal
     ): self {
-        return new self(
+        $prestation = new self(
             PrestationId::generate(),
             $rendezVousId,
             $serviceProposeId,
             $dateRealisation,
             $coutTotal
         );
+
+        $prestation->recordEvent(new PrestationRealisee($prestation->getId(), $coutTotal));
+
+        return $prestation;
     }
 
     public function ajouterValeurChamp(

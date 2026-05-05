@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\Facture\Entity\Facture" table="facture">
+        <id name="id" type="facture_id" column="id" />
+        <field name="prestationId" type="prestation_id" />
+        <field name="numeroFacture" type="string" length="50" unique="true" />
+        <field name="montantHT" type="float" />
+        <field name="tva" type="float" />
+        <field name="montantTTC" type="float" />
+        <field name="statut" type="string" length="20">
+            <options>
+                <option name="default">en_attente</option>
+            </options>
+        </field>
+        <field name="createdAt" type="datetime_immutable" />
+        <field name="updatedAt" type="datetime_immutable" nullable="true" />
+    </entity>
+
+</doctrine-mapping>
