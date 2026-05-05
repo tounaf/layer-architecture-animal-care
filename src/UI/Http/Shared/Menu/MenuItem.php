@@ -13,7 +13,8 @@ final readonly class MenuItem
         public ?string $routeName = null,
         public ?string $routePrefix = null,
         public array $children = [],
-        public array $roles = []
+        public array $roles = [],
+        public int $priority = 0,
     ) {}
 
     public function hasChildren(): bool
@@ -38,5 +39,36 @@ final readonly class MenuItem
         }
 
         return false;
+    }
+
+    /**
+     * Crée une nouvelle instance avec les enfants triés par priorité
+     */
+    public function withSortedChildren(): self
+    {
+        if (!$this->hasChildren()) {
+            return $this;
+        }
+
+        $sortedChildren = $this->children;
+        usort($sortedChildren, function (MenuItem $a, MenuItem $b) {
+            return $b->priority <=> $a->priority;
+        });
+
+        // Trier récursivement les enfants
+        $sortedChildren = array_map(
+            fn(MenuItem $child) => $child->withSortedChildren(),
+            $sortedChildren
+        );
+
+        return new self(
+            label: $this->label,
+            icon: $this->icon,
+            routeName: $this->routeName,
+            routePrefix: $this->routePrefix,
+            children: $sortedChildren,
+            roles: $this->roles,
+            priority: $this->priority,
+        );
     }
 }

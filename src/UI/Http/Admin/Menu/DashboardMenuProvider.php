@@ -14,7 +14,8 @@ final class DashboardMenuProvider implements MenuProviderInterface
                 label: 'Dashboard',
                 icon: 'ti ti-dashboard',
                 routeName: 'admin_dashboard',
-                routePrefix: 'admin_dashboard'
+                routePrefix: 'admin_dashboard',
+                priority: 10
             ),
         ];
     }

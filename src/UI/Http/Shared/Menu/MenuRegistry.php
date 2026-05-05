@@ -2,7 +2,7 @@
 
 namespace UI\Http\Shared\Menu;
 
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class MenuRegistry
 {
@@ -10,7 +10,7 @@ final class MenuRegistry
     private iterable $providers;
 
     public function __construct(
-        #[TaggedIterator('app.menu_provider')] iterable $providers
+        #[AutowireIterator('app.menu_provider')] iterable $providers
     ) {
         $this->providers = $providers;
     }
@@ -24,6 +24,15 @@ final class MenuRegistry
         foreach ($this->providers as $provider) {
             $items = array_merge($items, $provider->provide());
         }
+
+        usort($items, function (MenuItem $a, MenuItem $b) {
+            return $b->priority <=> $a->priority;
+        });
+
+        $items = array_map(
+            fn(MenuItem $item) => $item->withSortedChildren(),
+            $items
+        );
 
         return $items;
     }
