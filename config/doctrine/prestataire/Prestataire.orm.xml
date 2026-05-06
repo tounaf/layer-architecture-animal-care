@@ -12,7 +12,8 @@
         <field name="nomStructure" type="string" column="nom_structure"/>
         <field name="nomContact" type="string" column="nom_contact"/>
         <field name="prenomContact" type="string" column="prenom_contact"/>
-        <field name="profession" type="string"/>
+        <field name="profession" type="string" column="profession"/>
+        <field name="email" type="string" column="email" nullable="true"/>
         <field name="valideParAdmin" type="boolean" column="valide_par_admin"/>
     </entity>
 

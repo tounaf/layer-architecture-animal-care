@@ -103,6 +103,10 @@ Le projet utilise un système de menu découplé où chaque domaine s'enregistre
 Chaque domaine peut injecter des boutons, dropdowns ou liens dans le Topbar via des Slots (`left`, `right`, `user_menu`).
 *Voir [docs/TOPBAR.md](docs/TOPBAR.md) pour plus de détails.*
 
+### 7. Dashboard Dynamique (AJAX & KPIs)
+Le tableau de bord utilise une architecture asynchrone pour charger les statistiques métier sans ralentir l'interface.
+*Voir [docs/DASHBOARD.md](docs/DASHBOARD.md) pour plus de détails.*
+
 ### 🔍 Débogage de l'Interface
 Pour visualiser tous les éléments enregistrés (Menu et Topbar), leurs priorités et leurs providers :
 ```bash

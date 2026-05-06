@@ -9,7 +9,6 @@ use Domain\Prestation\ValueObject\PrestationId;
 class MouvementStock
 {
     private \DateTimeImmutable $dateMouvement;
-    private Medicament $medicament;
 
     public function __construct(
         private string $id,

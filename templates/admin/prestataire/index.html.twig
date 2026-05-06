@@ -51,6 +51,7 @@
                             <th>Structure</th>
                             <th>Contact</th>
                             <th>Profession</th>
+                            <th>Email</th>
                             <th>Statut</th>
                             <th class="text-end">Actions</th>
                         </tr>
@@ -70,6 +71,9 @@
                                     <span class="badge bg-secondary">{{ prestataire.profession|default('Non renseigné') }}</span>
                                 </td>
                                 <td>
+                                    {{ prestataire.email|default('Non renseigné') }}
+                                </td>
+                                <td>
                                     {% if prestataire.isValideParAdmin %}
                                         <span class="badge bg-success">
                                             <i class="ti ti-check me-1"></i>Validé
@@ -85,6 +89,10 @@
                                         <a href="{{ path('admin_prestataire_edit', {id: prestataire.id}) }}" 
                                            class="btn btn-sm btn-icon btn-white" title="Modifier">
                                             <i class="ti ti-edit"></i>
+                                        </a>
+                                        <a href="{{ path('admin_prestataire_show', {id: prestataire.id}) }}" 
+                                           class="btn btn-sm btn-icon btn-white" title="Voir les détails">
+                                            <i class="ti ti-eye"></i>
                                         </a>
                                         <form method="post" 
                                               action="{{ path('admin_prestataire_delete', {id: prestataire.id}) }}" 

@@ -20,17 +20,4 @@
         </one-to-many>
     </entity>
 
-    <entity name="Domain\Medicament\Entity\MouvementStock" table="medicament_mouvement_stock">
-        <id name="id" type="string" column="id" />
-        <field name="quantite" type="integer" />
-        <field name="type" type="string" length="10" />
-        <field name="prestationId" type="prestation_id" column="prestation_id" nullable="true" />
-        <field name="commentaire" type="text" nullable="true" />
-        <field name="dateMouvement" type="datetime_immutable" />
-
-        <many-to-one field="medicament" target-entity="Domain\Medicament\Entity\Medicament" inversed-by="mouvements">
-            <join-column name="medicament_id" referenced-column-name="id" />
-        </many-to-one>
-    </entity>
-
 </doctrine-mapping>
