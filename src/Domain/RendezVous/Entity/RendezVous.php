@@ -12,6 +12,8 @@ use Domain\RendezVous\ValueObject\TimeRange;
 use Domain\RendezVous\Enum\StatutRendezVous;
 use Domain\RendezVous\Event\RendezVousConfirme;
 use Domain\RendezVous\Event\RendezVousAnnule;
+use Domain\RendezVous\Event\RendezVousDemande;
+use Domain\RendezVous\Event\RendezVousReporte;
 
 class RendezVous extends AggregateRoot
 {
@@ -44,7 +46,7 @@ class RendezVous extends AggregateRoot
 
         $plageHoraire = new TimeRange($heureDebut, $dureeMinutes);
 
-        return new self(
+        $rdv = new self(
             RendezVousId::generate(),
             $clientId,
             $animalId,
@@ -55,6 +57,10 @@ class RendezVous extends AggregateRoot
             StatutRendezVous::EN_ATTENTE,
             $commentaires
         );
+
+        $rdv->recordEvent(new RendezVousDemande($rdv->getId(), $rdv->getClientId(), $rdv->getPrestataireId()));
+
+        return $rdv;
     }
 
     public function confirmer(): void
@@ -111,6 +117,8 @@ class RendezVous extends AggregateRoot
         
         // On peut décider de repasser en attente ou rester confirmé
         // Ici on reste dans le statut actuel mais avec une nouvelle date
+
+        $this->recordEvent(new RendezVousReporte($this->id));
     }
 
     public function getId(): RendezVousId { return $this->id; }

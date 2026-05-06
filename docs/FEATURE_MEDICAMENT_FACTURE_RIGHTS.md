@@ -55,3 +55,32 @@ La gestion des droits a été améliorée pour être plus robuste et liée direc
 - **Contrôle d'Accès Dynamique** : Un `AccessControlSubscriber` intercepte chaque requête vers un contrôleur. Si la route est associée à un `Right`, il vérifie que l'utilisateur possède ce droit (directement ou via ses profils/groupes).
 - **Menu Filtré** : Le `MenuRegistry` filtre automatiquement les éléments de menu en fonction des droits de l'utilisateur. Un lien vers une route protégée ne s'affichera que si l'utilisateur a l'autorisation.
 - **Performance** : Les calculs de droits sont mis en cache (Symfony Cache) par utilisateur pour garantir une performance optimale.
+
+---
+
+# Feature : Notifications par Email
+
+L'application envoie désormais des notifications automatiques par email lors des moments clés du parcours client.
+
+## 🏗️ Architecture
+
+### 1. Infrastructure (`src/Infrastructure/Shared/Email`)
+- **Service** : `EmailSender` (Wrappe le Mailer de Symfony pour envoyer des emails basés sur des templates Twig).
+
+### 2. Événements & Abonnés
+Les notifications sont déclenchées par des abonnés (Subscribers) qui écoutent les événements de domaine, garantissant que la logique d'envoi d'email ne pollue pas les handlers métier.
+
+- **Rendez-vous** (`RendezVousEmailSubscriber`) :
+    - Nouvelle demande : Email au client (attente) et au prestataire (notification).
+    - Confirmation : Email de confirmation au client.
+    - Annulation : Email d'information au client et au prestataire (avec motif).
+    - Report : Email d'information au client avec la nouvelle date/heure.
+
+- **Prestation** (`PrestationEmailSubscriber`) :
+    - Réalisation : Envoi d'un résumé de l'acte au client.
+
+- **Facturation** (`FactureEmailSubscriber`) :
+    - Génération : Envoi de la facture au client dès qu'elle est générée.
+
+## 📄 Templates
+Les templates se trouvent dans `templates/emails/` et peuvent être facilement personnalisés.

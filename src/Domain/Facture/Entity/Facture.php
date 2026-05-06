@@ -6,6 +6,7 @@ use Domain\Shared\Entity\AggregateRoot;
 use Domain\Facture\ValueObject\FactureId;
 use Domain\Prestation\ValueObject\PrestationId;
 use Domain\Facture\Enum\StatutFacture;
+use Domain\Facture\Event\FactureGeneree;
 
 class Facture extends AggregateRoot
 {
@@ -32,7 +33,7 @@ class Facture extends AggregateRoot
         $montantHT = $montantTotal / (1 + $tvaRate);
         $tva = $montantTotal - $montantHT;
 
-        return new self(
+        $facture = new self(
             FactureId::generate(),
             $prestationId,
             'FACT-' . date('Ymd') . '-' . substr(bin2hex(random_bytes(4)), 0, 4),
@@ -41,6 +42,10 @@ class Facture extends AggregateRoot
             $montantTotal,
             StatutFacture::EN_ATTENTE
         );
+
+        $facture->recordEvent(new FactureGeneree($facture->getId()));
+
+        return $facture;
     }
 
     public function getId(): FactureId { return $this->id; }
