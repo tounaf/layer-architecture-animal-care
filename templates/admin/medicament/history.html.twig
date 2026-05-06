@@ -1,0 +1,66 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Historique de stock - {{ medicament.nom }}{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-3 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    <i class="ti ti-history me-2"></i>Historique : {{ medicament.nom }}
+                </h2>
+                <div class="text-muted mt-1">Stock actuel : {{ medicament.stockActuel }}</div>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('admin_medicament_index') }}" class="btn btn-white">Retour</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Quantité</th>
+                            <th>Prestation</th>
+                            <th>Commentaire</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mouvement in medicament.mouvements|sort((a, b) => b.dateMouvement <=> a.dateMouvement) %}
+                            <tr>
+                                <td>{{ mouvement.dateMouvement|date('d/m/Y H:i') }}</td>
+                                <td>
+                                    <span class="badge {{ mouvement.type.value == 'entree' ? 'bg-success' : 'bg-danger' }}">
+                                        {{ mouvement.type.value|capitalize }}
+                                    </span>
+                                </td>
+                                <td>{{ mouvement.type.value == 'sortie' ? '-' : '+' }}{{ mouvement.quantite }}</td>
+                                <td>
+                                    {% if mouvement.prestationId %}
+                                        <a href="{{ path('admin_prestation_show', {id: mouvement.prestationId}) }}">
+                                            #{{ mouvement.prestationId|slice(0, 8) }}
+                                        </a>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ mouvement.commentaire }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center">Aucun mouvement de stock</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

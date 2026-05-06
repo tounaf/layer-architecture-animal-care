@@ -91,4 +91,31 @@ class MedicamentAdminController extends AbstractController
         }
         return $this->redirectToRoute('admin_medicament_index');
     }
+
+    #[Route('/{id}/approvisionner', name: 'restock', methods: ['POST'])]
+    public function restock(string $id, Request $request): Response
+    {
+        $medicament = $this->medicamentRepository->findById(MedicamentId::fromString($id));
+        if (!$medicament) throw $this->createNotFoundException();
+
+        $quantite = (int)$request->request->get('quantite');
+        if ($quantite > 0) {
+            $medicament->approvisionner($quantite, $request->request->get('commentaire'));
+            $this->medicamentRepository->save($medicament);
+            $this->addFlash('success', "Stock mis à jour pour {$medicament->getNom()}");
+        }
+
+        return $this->redirectToRoute('admin_medicament_index');
+    }
+
+    #[Route('/{id}/historique', name: 'history')]
+    public function history(string $id): Response
+    {
+        $medicament = $this->medicamentRepository->findById(MedicamentId::fromString($id));
+        if (!$medicament) throw $this->createNotFoundException();
+
+        return $this->render('admin/medicament/history.html.twig', [
+            'medicament' => $medicament
+        ]);
+    }
 }

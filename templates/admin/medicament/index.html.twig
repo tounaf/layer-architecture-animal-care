@@ -47,6 +47,14 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-list justify-content-end">
+                                        <button type="button" class="btn btn-sm btn-icon btn-white" data-bs-toggle="modal" data-bs-target="#restock-{{ medicament.id }}" title="Approvisionner">
+                                            <i class="ti ti-plus"></i>
+                                        </button>
+                                        <a href="{{ path('admin_medicament_history', {id: medicament.id}) }}"
+                                           class="btn btn-sm btn-icon btn-white"
+                                           title="Historique">
+                                            <i class="ti ti-history"></i>
+                                        </a>
                                         <a href="{{ path('admin_medicament_edit', {id: medicament.id}) }}"
                                            class="btn btn-sm btn-icon btn-white"
                                            title="Modifier">
@@ -77,4 +85,33 @@
         </div>
     </div>
 </div>
+
+{% for medicament in medicaments %}
+<div class="modal modal-blur fade" id="restock-{{ medicament.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form action="{{ path('admin_medicament_restock', {id: medicament.id}) }}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title">Approvisionner : {{ medicament.nom }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Quantité à ajouter</label>
+            <input type="number" class="form-control" name="quantite" required min="1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Commentaire</label>
+            <textarea class="form-control" name="commentaire" placeholder="Ex: Livraison fournisseur #123"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary ms-auto">Valider l'entrée</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

@@ -83,7 +83,7 @@ final class RealiserPrestationHandler
         foreach ($command->prescriptions as $prescription) {
             $medicament = $this->medicamentRepository->findById(MedicamentId::fromString($prescription['medicamentId']));
             if ($medicament) {
-                $medicament->prescrire((int)$prescription['quantite']);
+                $medicament->prescrire((int)$prescription['quantite'], $prestation->getId());
                 $this->medicamentRepository->save($medicament);
             }
         }

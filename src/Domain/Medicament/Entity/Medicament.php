@@ -4,11 +4,16 @@ namespace Domain\Medicament\Entity;
 
 use Domain\Shared\Entity\AggregateRoot;
 use Domain\Medicament\ValueObject\MedicamentId;
+use Domain\Medicament\Enum\TypeMouvement;
+use Domain\Prestation\ValueObject\PrestationId;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Medicament extends AggregateRoot
 {
     private \DateTimeImmutable $createdAt;
     private ?\DateTimeImmutable $updatedAt = null;
+    private Collection $mouvements;
 
     public function __construct(
         private MedicamentId $id,
@@ -18,6 +23,7 @@ class Medicament extends AggregateRoot
         private int $stockActuel
     ) {
         $this->createdAt = new \DateTimeImmutable();
+        $this->mouvements = new ArrayCollection();
     }
 
     public static function creer(
@@ -40,6 +46,7 @@ class Medicament extends AggregateRoot
     public function getDescription(): string { return $this->description; }
     public function getPrixUnitaire(): float { return $this->prixUnitaire; }
     public function getStockActuel(): int { return $this->stockActuel; }
+    public function getMouvements(): Collection { return $this->mouvements; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getUpdatedAt(): ?\DateTimeImmutable { return $this->updatedAt; }
 
@@ -61,12 +68,33 @@ class Medicament extends AggregateRoot
         }
     }
 
-    public function prescrire(int $quantite): void
+    public function prescrire(int $quantite, PrestationId $prestationId): void
     {
         if ($quantite <= 0) {
             throw new \InvalidArgumentException("La quantité prescrite doit être positive.");
         }
         $this->ajusterStock(-$quantite);
-        // On pourrait enregistrer un événement ici si besoin
+        $this->mouvements->add(MouvementStock::creer(
+            $this,
+            $quantite,
+            TypeMouvement::SORTIE,
+            $prestationId,
+            "Sortie pour prestation {$prestationId}"
+        ));
+    }
+
+    public function approvisionner(int $quantite, string $commentaire = null): void
+    {
+        if ($quantite <= 0) {
+            throw new \InvalidArgumentException("La quantité d'approvisionnement doit être positive.");
+        }
+        $this->ajusterStock($quantite);
+        $this->mouvements->add(MouvementStock::creer(
+            $this,
+            $quantite,
+            TypeMouvement::ENTREE,
+            null,
+            $commentaire ?: "Approvisionnement de stock"
+        ));
     }
 }

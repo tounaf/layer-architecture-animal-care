@@ -13,4 +13,5 @@ framework:
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
 
         routing:
-            'Domain\Shared\Event\DomainEvent': async
+            # En Symfony, ne pas router vers "sync" explicitement si on veut l'exécution immédiate par défaut
+            # 'Domain\Shared\Event\DomainEvent': async
