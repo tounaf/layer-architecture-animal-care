@@ -14,16 +14,16 @@ class PrestataireFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $prestatairesData = [
-            1 => ['Clinique Vétérinaire Analakely', 'Rakoto', 'Jean', 'vétérinaire', 'rakoto@example.com', true],
-            2 => ['Toilettage Canin Isotry', 'Randria', 'Sarah', 'toiletteur', 'randria@example.com', true],
-            3 => ['Dr. Rasoa - Vétérinaire à domicile', 'Rasoa', 'Marie', 'vétérinaire', 'rasoa@example.com', true],
-            4 => ['Pension Doggy Palace', 'Rajaonarison', 'Pierre', 'pension', 'rajaonarison@example.com', true],
-            5 => ['Éducation Canine Tana', 'Rabe', 'Paul', 'éducateur', 'rabe@example.com', true],
+            1 => ['Clinique Vétérinaire Analakely', 'Rakoto', 'Jean', 'vétérinaire', true],
+            2 => ['Toilettage Canin Isotry', 'Randria', 'Sarah', 'toiletteur', true],
+            3 => ['Dr. Rasoa - Vétérinaire à domicile', 'Rasoa', 'Marie', 'vétérinaire', true],
+            4 => ['Pension Doggy Palace', 'Rajaonarison', 'Pierre', 'pension', true],
+            5 => ['Éducation Canine Tana', 'Rabe', 'Paul', 'éducateur', true],
         ];
 
         $prestataires = [];
         foreach ($prestatairesData as $id => $data) {
-            $prestataire = Prestataire::creer($data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
+            $prestataire = Prestataire::creer($data[0], $data[1], $data[2], $data[3], $data[4]);
             $manager->persist($prestataire);
             $prestataires[$id] = $prestataire;
         }

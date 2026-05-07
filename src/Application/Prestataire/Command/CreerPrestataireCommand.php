@@ -9,7 +9,6 @@ final class CreerPrestataireCommand
         public readonly string $nomContact,
         public readonly string $prenomContact,
         public readonly string $profession,
-        public readonly string $email,
         public readonly bool $valideParAdmin = false
     ) {
     }

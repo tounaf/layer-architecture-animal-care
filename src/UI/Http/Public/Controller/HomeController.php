@@ -12,6 +12,9 @@ class HomeController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): Response
     {
-        return $this->redirectToRoute('admin_dashboard');
+        if ($this->getUser()) {
+            return $this->redirectToRoute('public_client_dashboard');
+        }
+        return $this->redirectToRoute('admin_login_index');
     }
 }

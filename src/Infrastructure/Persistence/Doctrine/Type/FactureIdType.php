@@ -10,14 +10,6 @@ class FactureIdType extends StringType
 {
     public const NAME = 'facture_id';
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
-    {
-        return $platform->getStringTypeDeclarationSQL([
-            'length' => $column['length'] ?? 39,
-            'fixed' => false,
-        ]);
-    }
-
     public function convertToPHPValue($value, AbstractPlatform $platform): ?FactureId
     {
         return $value !== null ? FactureId::fromString($value) : null;

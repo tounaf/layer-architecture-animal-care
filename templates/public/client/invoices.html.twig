@@ -1,0 +1,31 @@
+{% extends 'public/client/layout.html.twig' %}
+
+{% block client_content %}
+<div class="card">
+    <div class="card-header"><h5>Mes Factures</h5></div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Date</th>
+                    <th>Montant TTC</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for facture in factures %}
+                    <tr>
+                        <td>{{ facture.numeroFacture }}</td>
+                        <td>{{ facture.createdAt|date('d/m/Y') }}</td>
+                        <td>{{ facture.montantTTC }} EUR</td>
+                        <td>{{ facture.statut.value }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4">Aucune facture</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -11,5 +11,6 @@ interface ClientRepositoryInterface
     public function findById(ClientId $id): ?Client;
     /** @return Client[] */
     public function findAll(): array;
+    public function findByEmail(string $email): ?Client;
     public function delete(Client $client): void;
 }

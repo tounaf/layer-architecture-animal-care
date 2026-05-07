@@ -10,14 +10,6 @@ class MedicamentIdType extends StringType
 {
     public const NAME = 'medicament_id';
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
-    {
-        return $platform->getStringTypeDeclarationSQL([
-            'length' => $column['length'] ?? 39,
-            'fixed' => false,
-        ]);
-    }
-
     public function convertToPHPValue($value, AbstractPlatform $platform): ?MedicamentId
     {
         return $value !== null ? MedicamentId::fromString($value) : null;

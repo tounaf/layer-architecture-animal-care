@@ -17,10 +17,6 @@ class PrestataireType extends AbstractType
             ->add('nomContact', TextType::class, ['label' => 'Nom du contact'])
             ->add('prenomContact', TextType::class, ['label' => 'Prénom du contact'])
             ->add('profession', TextType::class, ['label' => 'Profession'])
-            ->add('email', TextType::class, [
-                'label' => 'Email',
-                'required' => true,
-            ])
             ->add('valideParAdmin', CheckboxType::class, [
                 'label' => 'Validé par l\'administration',
                 'required' => false

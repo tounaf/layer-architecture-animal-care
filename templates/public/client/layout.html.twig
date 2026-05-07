@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container py-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm rounded">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('public_client_dashboard') }}">Mon Espace VetoCare</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ path('public_client_dashboard') }}">Tableau de bord</a>
+                <a class="nav-link" href="{{ path('public_client_invoices') }}">Mes Factures</a>
+                <a class="nav-link" href="{{ path('public_client_profile') }}">Mon Profil</a>
+                <a class="nav-link text-danger" href="{{ path('admin_logout') }}">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    {% block client_content %}{% endblock %}
+</div>
+{% endblock %}

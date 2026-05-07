@@ -53,7 +53,6 @@ class PrestataireAdminController extends AbstractController
                 $data['nomContact'],
                 $data['prenomContact'],
                 $data['profession'],
-                $data['email'],
                 $data['valideParAdmin'] ?? false
             );
 
@@ -97,7 +96,6 @@ class PrestataireAdminController extends AbstractController
             'nomContact' => $prestataire->getNomContact(),
             'prenomContact' => $prestataire->getPrenomContact(),
             'profession' => $prestataire->getProfession(),
-            'email' => $prestataire->getEmail(),
             'valideParAdmin' => $prestataire->isValideParAdmin()
         ]);
 
@@ -111,7 +109,6 @@ class PrestataireAdminController extends AbstractController
                 $data['nomContact'],
                 $data['prenomContact'],
                 $data['profession'],
-                $data['email'],
                 $data['valideParAdmin'] ?? false
             );
 

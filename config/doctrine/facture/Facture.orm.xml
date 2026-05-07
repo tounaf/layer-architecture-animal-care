@@ -11,7 +11,11 @@
         <field name="montantHT" type="float" />
         <field name="tva" type="float" />
         <field name="montantTTC" type="float" />
-        <field name="statut" enum-type="Domain\Facture\Enum\StatutFacture" />
+        <field name="statut" type="string" length="20">
+            <options>
+                <option name="default">en_attente</option>
+            </options>
+        </field>
         <field name="createdAt" type="datetime_immutable" />
         <field name="updatedAt" type="datetime_immutable" nullable="true" />
     </entity>

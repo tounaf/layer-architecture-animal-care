@@ -15,11 +15,10 @@ final class UserMenuProvider implements MenuProviderInterface
                 icon: 'ti ti-users',
                 routeName: 'admin_user_index',
                 children: [
-                    new MenuItem('Droits', null, 'admin_right_index'),
                     new MenuItem('Utilisateurs', null, 'admin_user_index'),
-                    new MenuItem('Profils', null, 'admin_profile_index'),
                     new MenuItem('Groupes', null, 'admin_group_index'),
-                    
+                    new MenuItem('Profils', null, 'admin_profile_index'),
+                    new MenuItem('Droits', null, 'admin_right_index'),
                 ]
             ),
         ];

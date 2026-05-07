@@ -1,0 +1,13 @@
+{% extends 'public/client/layout.html.twig' %}
+
+{% block client_content %}
+<div class="card col-md-6">
+    <div class="card-header"><h5>Mon Profil</h5></div>
+    <div class="card-body">
+        <p><strong>Nom :</strong> {{ client.nom }}</p>
+        <p><strong>Prénom :</strong> {{ client.prenom }}</p>
+        <p><strong>Email :</strong> {{ client.email }}</p>
+        <p><strong>Téléphone :</strong> {{ client.telephone }}</p>
+    </div>
+</div>
+{% endblock %}

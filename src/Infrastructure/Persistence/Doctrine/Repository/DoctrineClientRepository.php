@@ -30,6 +30,11 @@ final class DoctrineClientRepository implements ClientRepositoryInterface
         return $this->entityManager->getRepository(Client::class)->findAll();
     }
 
+    public function findByEmail(string $email): ?Client
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
+
     public function delete(Client $client): void
     {
         $this->entityManager->remove($client);

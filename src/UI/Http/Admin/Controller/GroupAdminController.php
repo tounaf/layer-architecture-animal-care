@@ -38,8 +38,8 @@ class GroupAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']);
-            $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']);
+            $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']->toArray());
+            $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']->toArray());
 
             $this->bus->dispatch(new CreateGroupCommand($data['groupName'], $rightIds, $profileIds));
             return $this->redirectToRoute('admin_group_index');
@@ -63,8 +63,8 @@ class GroupAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']);
-            $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']);
+            $rightIds = array_map(fn($r) => (string)$r->getId(), $data['rights']->toArray());
+            $profileIds = array_map(fn($p) => (string)$p->getId(), $data['profiles']->toArray());
 
             $this->bus->dispatch(new UpdateGroupCommand($id, $data['groupName'], $rightIds, $profileIds));
             return $this->redirectToRoute('admin_group_index');

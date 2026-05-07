@@ -20,7 +20,6 @@ final class CreerPrestataireHandler
             $command->nomContact,
             $command->prenomContact,
             $command->profession,
-            $command->email,
             $command->valideParAdmin
         );
 
