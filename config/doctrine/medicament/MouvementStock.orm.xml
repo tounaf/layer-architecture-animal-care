@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Domain\Medicament\Entity\MouvementStock" table="medicament_mouvement_stock">
+        <id name="id" type="string" column="id" />
+        <field name="quantite" type="integer" />
+        <field name="type" type="string" enum-type="Domain\Medicament\Enum\TypeMouvement"/>
+        <field name="prestationId" type="prestation_id" column="prestation_id" nullable="true" />
+        <field name="commentaire" type="text" nullable="true" />
+        <field name="dateMouvement" type="datetime_immutable" />
+
+        <many-to-one field="medicament" target-entity="Domain\Medicament\Entity\Medicament" inversed-by="mouvements">
+            <join-column name="medicament_id" referenced-column-name="id" />
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>

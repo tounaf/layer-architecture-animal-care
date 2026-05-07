@@ -1,0 +1,117 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Gestion des Médicaments{% endblock %}
+
+{% block body %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-3 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    <i class="ti ti-pill me-2"></i>Médicaments
+                </h2>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('admin_medicament_new') }}" class="btn btn-primary">
+                    <i class="ti ti-plus me-2"></i>Nouveau Médicament
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Prix Unitaire</th>
+                            <th>Stock Actuel</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for medicament in medicaments %}
+                            <tr>
+                                <td><strong>{{ medicament.nom }}</strong></td>
+                                <td>{{ medicament.description|slice(0, 50) }}...</td>
+                                <td>{{ medicament.prixUnitaire }} EUR</td>
+                                <td>
+                                    <span class="badge {{ medicament.stockActuel < 10 ? 'bg-danger' : 'bg-success' }}">
+                                        {{ medicament.stockActuel }}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-list justify-content-end">
+                                        <button type="button" class="btn btn-sm btn-icon btn-white" data-bs-toggle="modal" data-bs-target="#restock-{{ medicament.id }}" title="Approvisionner">
+                                            <i class="ti ti-plus"></i>
+                                        </button>
+                                        <a href="{{ path('admin_medicament_history', {id: medicament.id}) }}"
+                                           class="btn btn-sm btn-icon btn-white"
+                                           title="Historique">
+                                            <i class="ti ti-history"></i>
+                                        </a>
+                                        <a href="{{ path('admin_medicament_edit', {id: medicament.id}) }}"
+                                           class="btn btn-sm btn-icon btn-white"
+                                           title="Modifier">
+                                            <i class="ti ti-edit"></i>
+                                        </a>
+                                        <form method="post"
+                                              action="{{ path('admin_medicament_delete', {id: medicament.id}) }}"
+                                              onsubmit="return confirm('Êtes-vous sûr ?');"
+                                              style="display: inline;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ medicament.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-icon btn-danger" title="Supprimer">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <p class="text-muted">Aucun médicament trouvé</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for medicament in medicaments %}
+<div class="modal modal-blur fade" id="restock-{{ medicament.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form action="{{ path('admin_medicament_restock', {id: medicament.id}) }}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title">Approvisionner : {{ medicament.nom }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Quantité à ajouter</label>
+            <input type="number" class="form-control" name="quantite" required min="1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Commentaire</label>
+            <textarea class="form-control" name="commentaire" placeholder="Ex: Livraison fournisseur #123"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary ms-auto">Valider l'entrée</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

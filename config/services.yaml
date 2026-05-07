@@ -46,3 +46,5 @@ services:
     Domain\User\Repository\GroupRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineGroupRepository'
     Domain\User\Repository\ProfileRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineProfileRepository'
     Domain\User\Repository\RightRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineRightRepository'
+    Domain\Medicament\Repository\MedicamentRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineMedicamentRepository'
+    Domain\Facture\Repository\FactureRepositoryInterface: '@Infrastructure\Persistence\Doctrine\Repository\DoctrineFactureRepository'

@@ -56,8 +56,10 @@ class RendezVousTest extends TestCase
         $this->assertEquals(StatutRendezVous::ANNULE, $rdv->getStatut());
         
         $events = $rdv->getEvents();
-        $this->assertCount(1, $events);
-        $this->assertInstanceOf(\Domain\RendezVous\Event\RendezVousAnnule::class, $events[0]);
+        // 2 events: RendezVousDemande (from creer) and RendezVousAnnule
+        $this->assertCount(2, $events);
+        $this->assertInstanceOf(\Domain\RendezVous\Event\RendezVousDemande::class, $events[0]);
+        $this->assertInstanceOf(\Domain\RendezVous\Event\RendezVousAnnule::class, $events[1]);
     }
 
     public function testConfirmerRendezVous(): void

@@ -13,6 +13,7 @@ class Prestataire extends AggregateRoot
         private string $nomContact,
         private string $prenomContact,
         private string $profession,
+        private string $email = '',
         private bool $valideParAdmin = false
     ) {
     }
@@ -22,6 +23,7 @@ class Prestataire extends AggregateRoot
         string $nomContact,
         string $prenomContact,
         string $profession,
+        string $email,
         bool $valideParAdmin = false
     ): self {
         return new self(
@@ -30,6 +32,7 @@ class Prestataire extends AggregateRoot
             $nomContact,
             $prenomContact,
             $profession,
+            $email,
             $valideParAdmin
         );
     }
@@ -39,12 +42,14 @@ class Prestataire extends AggregateRoot
         string $nomContact,
         string $prenomContact,
         string $profession,
+        string $email,
         bool $valideParAdmin
     ): void {
         $this->nomStructure = $nomStructure;
         $this->nomContact = $nomContact;
         $this->prenomContact = $prenomContact;
         $this->profession = $profession;
+        $this->email = $email;
         $this->valideParAdmin = $valideParAdmin;
     }
 
@@ -53,5 +58,6 @@ class Prestataire extends AggregateRoot
     public function getNomContact(): string { return $this->nomContact; }
     public function getPrenomContact(): string { return $this->prenomContact; }
     public function getProfession(): string { return $this->profession; }
+    public function getEmail(): string { return $this->email; }
     public function isValideParAdmin(): bool { return $this->valideParAdmin; }
 }

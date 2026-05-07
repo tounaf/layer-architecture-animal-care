@@ -10,6 +10,14 @@ class ActionIdType extends StringType
 {
     public const NAME = 'action_id';
 
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getStringTypeDeclarationSQL([
+            'length' => $column['length'] ?? 39,
+            'fixed' => false,
+        ]);
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?ActionId
     {
         return $value !== null ? ActionId::fromString($value) : null;

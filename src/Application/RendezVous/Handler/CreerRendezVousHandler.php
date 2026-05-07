@@ -13,13 +13,15 @@ use Domain\Client\Entity\Client;
 use Domain\Client\Repository\ClientRepositoryInterface;
 use Domain\Animal\Entity\Animal;
 use Domain\Animal\Repository\AnimalRepositoryInterface;
+use Application\Shared\Bus\EventBusInterface;
 
 class CreerRendezVousHandler
 {
     public function __construct(
         private RendezVousRepositoryInterface $repository,
         private ClientRepositoryInterface $clientRepository,
-        private AnimalRepositoryInterface $animalRepository
+        private AnimalRepositoryInterface $animalRepository,
+        private EventBusInterface $eventBus
     ) {
     }
 
@@ -58,5 +60,10 @@ class CreerRendezVousHandler
         );
 
         $this->repository->save($rendezVous);
+
+        foreach ($rendezVous->getEvents() as $event) {
+            $this->eventBus->dispatch($event);
+        }
+        $rendezVous->clearEvents();
     }
 }

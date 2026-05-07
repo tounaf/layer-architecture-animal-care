@@ -3,92 +3,171 @@
 {% block title %}Détails de la Prestation{% endblock %}
 
 {% block body %}
+
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-2 align-items-center">
+
             <div class="col">
-                <h2 class="page-title">Prestation du {{ prestation.dateRealisation|date('d/m/Y') }}</h2>
+                <h2 class="page-title">
+                    Prestation du {{ prestation.dateRealisation|date('d/m/Y') }}
+                </h2>
             </div>
+
             <div class="col-auto ms-auto">
-                <a href="{{ path('admin_prestation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                <a href="{{ path('admin_prestation_index') }}" class="btn btn-info">
+                    Retour à la liste
+                </a>
             </div>
+
         </div>
     </div>
 </div>
 
 <div class="page-body">
     <div class="container-xl">
+
         <div class="row row-cards">
+
+            <!-- ================= LEFT SIDE ================= -->
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header"><h3 class="card-title">Informations Générales</h3></div>
-                    <div class="card-body">
-                        <div class="datagrid">
-                            <div class="datagrid-item">
-                                <div class="datagrid-title">Service effectué</div>
-                                <div class="datagrid-content">{{ service.nom }}</div>
-                            </div>
-                            <div class="datagrid-item">
-                                <div class="datagrid-title">Client</div>
-                                <div class="datagrid-content">{{ clientInfo }}</div>
-                            </div>
-                            <div class="datagrid-item">
-                                <div class="datagrid-title">Animal</div>
-                                <div class="datagrid-content">{{ animalInfo }}</div>
-                            </div>
-                            <div class="datagrid-item">
-                                <div class="datagrid-title">Date Rendez-vous</div>
-                                <div class="datagrid-content">
-                                    {% if rdv %}
-                                        {{ rdv.dateRdv|date('d/m/Y') }} ({{ rdv.plageHoraire.debut }} - {{ rdv.plageHoraire.fin }})
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="datagrid-item">
-                                <div class="datagrid-title">Coût total</div>
-                                <div class="datagrid-content">{{ prestation.coutTotal }} EUR</div>
-                            </div>
-                            <div class="datagrid-item">
-                                <div class="datagrid-title">Statut</div>
-                                <div class="datagrid-content"><span class="status status-green">{{ prestation.statut }}</span></div>
-                            </div>
+
+                <!-- RESUME -->
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+
+                        <h3 class="mb-1">{{ service.nom }}</h3>
+                        <div class="text-muted">Service effectué</div>
+
+                        <hr>
+
+                        <div class="h1 text-">
+                            {{ prestation.coutTotal }} Ariary
                         </div>
+
+                        <div class="text-muted mb-3">Coût total</div>
+
+                        <span class="badge bg-info px-3 py-2">
+                            {{ prestation.statut }}
+                        </span>
+
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header"><h3 class="card-title">Détails spécifiques</h3></div>
+
+                <!-- CLIENT & ANIMAL -->
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title">Client & Animal</h3>
+                    </div>
+
                     <div class="card-body">
-                        <div class="datagrid">
+
+                        <div class="mb-3">
+                            <div class="text-muted small">Client</div>
+                            <div class="fw-bold">{{ clientInfo }}</div>
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">Animal</div>
+                            <div class="fw-bold">{{ animalInfo }}</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- RENDEZ-VOUS -->
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title">Rendez-vous</h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        {% if rdv %}
+
+                            <div class="mb-2">
+                                <div class="text-muted small">Date</div>
+                                <div class="fw-bold">
+                                    {{ rdv.dateRdv|date('d/m/Y') }}
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-muted small">Horaire</div>
+                                <div class="fw-bold">
+                                    {{ rdv.plageHoraire.debut }} - {{ rdv.plageHoraire.fin }}
+                                </div>
+                            </div>
+
+                        {% else %}
+                            <span class="text-muted">Aucun rendez-vous</span>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= RIGHT SIDE ================= -->
+            <div class="col-md-8">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+                        <h3 class="card-title">Détails spécifiques</h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
                             {% for valeur in prestation.valeursChamps %}
+
                                 {% set currentChamp = null %}
+
                                 {% for c in champs %}
                                     {% if c.id == valeur.serviceChampId %}
                                         {% set currentChamp = c %}
                                     {% endif %}
                                 {% endfor %}
-                                <div class="datagrid-item">
-                                    <div class="datagrid-title">{{ currentChamp ? currentChamp.nom : 'Champ ID: ' ~ valeur.serviceChampId }}</div>
-                                    <div class="datagrid-content">
-                                        {% if valeur.typeValeur == 'fichier' %}
-                                            <a href="{{ valeur.valeur }}" target="_blank" class="btn btn-sm btn-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M12 11v6" /><path d="M9.5 13.5l2.5 -2.5l2.5 2.5" /></svg>
-                                                Voir le document
-                                            </a>
-                                        {% else %}
-                                            {{ valeur.valeur }}
-                                        {% endif %}
+
+                                <div class="col-md-6 mb-3">
+
+                                    <div class="border rounded p-3 h-100">
+
+                                        <div class="text-muted small">
+                                            {{ currentChamp ? currentChamp.nom : 'Champ #' ~ valeur.serviceChampId }}
+                                        </div>
+
+                                        <div class="mt-1 fw-bold">
+
+                                            {% if valeur.typeValeur == 'fichier' %}
+                                                <a href="{{ valeur.valeur }}" target="_blank">
+                                                    📎 Voir le fichier
+                                                </a>
+                                            {% else %}
+                                                {{ valeur.valeur }}
+                                            {% endif %}
+
+                                        </div>
+
                                     </div>
+
                                 </div>
+
                             {% endfor %}
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
 </div>
+
 {% endblock %}

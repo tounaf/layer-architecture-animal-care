@@ -3,69 +3,166 @@
 {% block title %}Détails du Service{% endblock %}
 
 {% block body %}
+
+<!-- HEADER -->
 <div class="page-header d-print-none">
     <div class="container-xl">
-        <div class="row g-2 align-items-center">
+
+        <div class="row g-3 align-items-center">
+
             <div class="col">
-                <h2 class="page-title">Service : {{ service.nom }}</h2>
-            </div>
-            <div class="col-auto ms-auto d-print-none">
-                <div class="btn-list">
-                    <a href="{{ path('admin_service_edit', {id: service.id}) }}" class="btn btn-primary">
-                        Modifier
-                    </a>
+
+                <div class="d-flex align-items-center">
+
+                    <!-- ICON SERVICE -->
+                    <div class="me-3">
+                        <div class="avatar avatar-lg bg-primary-lt rounded-3 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-briefcase text-primary fs-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- TITLE -->
+                    <div>
+                        <h2 class="page-title mb-1">
+                            {{ service.nom }}
+                        </h2>
+
+                        <div class="text-muted small">
+                            Code : <strong>{{ service.code }}</strong>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
+
+            <!-- ACTION -->
+            <div class="col-auto ms-auto">
+
+                <div class="btn-list">
+
+                    <a href="{{ path('admin_service_edit', {id: service.id}) }}"
+                       class="btn btn-primary">
+                        <i class="ti ti-edit me-1"></i> Modifier
+                    </a>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 </div>
 
+<!-- BODY -->
 <div class="page-body">
     <div class="container-xl">
-        <div class="card">
-            <div class="card-body">
-                <div class="datagrid">
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Code</div>
-                        <div class="datagrid-content">{{ service.code }}</div>
+
+        <div class="row g-3">
+
+            <!-- LEFT CARD -->
+            <div class="col-12 col-lg-8">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+                        <h3 class="card-title">Informations générales</h3>
                     </div>
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Catégorie</div>
-                        <div class="datagrid-content">{{ service.categorie.nom }}</div>
-                    </div>
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Durée</div>
-                        <div class="datagrid-content">{{ service.dureeDefaultMinutes }} minutes</div>
-                    </div>
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Tarif actuel</div>
-                        <div class="datagrid-content">{{ service.tarif.montant }} {{ service.tarif.devise }}</div>
-                    </div>
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Acompte requis</div>
-                        <div class="datagrid-content">
-                            {% if service.isNecessiteAcompteDefault %}Oui{% else %}Non{% endif %}
+
+                    <div class="card-body">
+
+                        <div class="datagrid">
+
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Catégorie</div>
+                                <div class="datagrid-content">
+                                    <span class="badge bg-info-lt text-info">
+                                        {{ service.categorie.nom }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Durée</div>
+                                <div class="datagrid-content">
+                                    <strong>{{ service.dureeDefaultMinutes }}</strong> minutes
+                                </div>
+                            </div>
+
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Tarif actuel</div>
+                                <div class="datagrid-content">
+                                    <span class="badge bg-success-lt text-success">
+                                        {{ service.tarif.montant }} {{ service.tarif.devise }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Acompte requis</div>
+                                <div class="datagrid-content">
+
+                                    {% if service.isNecessiteAcompteDefault %}
+                                        <span class="badge bg-warning-lt text-warning">Oui</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-lt">Non</span>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Statut</div>
+                                <div class="datagrid-content">
+
+                                    {% if service.isActif %}
+                                        <span class="badge bg-success">Actif</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactif</span>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
                         </div>
+
                     </div>
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Statut</div>
-                        <div class="datagrid-content">
-                            {% if service.isActif %}
-                                <span class="status status-green">Actif</span>
-                            {% else %}
-                                <span class="status status-red">Inactif</span>
-                            {% endif %}
-                        </div>
-                    </div>
+
                 </div>
-                <div class="datagrid mt-4">
-                    <div class="datagrid-item">
-                        <div class="datagrid-title">Description</div>
-                        <div class="datagrid-content">{{ service.description|default('Aucune description') }}</div>
-                    </div>
-                </div>
+
             </div>
+
+            <!-- RIGHT CARD -->
+            <div class="col-12 col-lg-4">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+                        <h3 class="card-title">Description</h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        {% if service.description %}
+                            <p class="text-muted">
+                                {{ service.description }}
+                            </p>
+                        {% else %}
+                            <div class="text-muted">
+                                Aucune description disponible.
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 </div>
+
 {% endblock %}

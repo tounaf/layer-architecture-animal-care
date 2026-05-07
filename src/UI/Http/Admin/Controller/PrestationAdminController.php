@@ -13,6 +13,7 @@ use Domain\Service\Repository\ServiceRepositoryInterface;
 use Domain\Service\Repository\ServiceChampRepositoryInterface;
 use Domain\Client\Repository\ClientRepositoryInterface;
 use Domain\Animal\Repository\AnimalRepositoryInterface;
+use Domain\Medicament\Repository\MedicamentRepositoryInterface;
 use Infrastructure\File\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +30,8 @@ class PrestationAdminController extends AbstractController
         private ServiceRepositoryInterface $serviceRepository,
         private ServiceChampRepositoryInterface $champRepository,
         private ClientRepositoryInterface $clientRepository,
-        private AnimalRepositoryInterface $animalRepository
+        private AnimalRepositoryInterface $animalRepository,
+        private MedicamentRepositoryInterface $medicamentRepository
     ) {
     }
 
@@ -118,6 +120,7 @@ class PrestationAdminController extends AbstractController
         }
 
         $champs = $this->champRepository->findAll();
+        $medicaments = $this->medicamentRepository->findAll();
 
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('realiser_prestation', $request->request->get('_token'))) {
@@ -148,12 +151,26 @@ class PrestationAdminController extends AbstractController
                 }
             }
 
+            $prescriptions = [];
+            $medIds = $request->request->all('med_ids') ?? [];
+            $medQtys = $request->request->all('med_qtys') ?? [];
+
+            foreach ($medIds as $index => $medId) {
+                if (!empty($medId) && !empty($medQtys[$index])) {
+                    $prescriptions[] = [
+                        'medicamentId' => $medId,
+                        'quantite' => (int)$medQtys[$index]
+                    ];
+                }
+            }
+
             $command = new RealiserPrestationCommand(
                 $rdvId,
                 (string) $rdv->getServiceProposeId(),
                 new \DateTimeImmutable(),
                 (float) $request->request->get('coutTotal'),
-                $valeursChamps
+                $valeursChamps,
+                $prescriptions
             );
 
             $handler($command);
@@ -164,7 +181,8 @@ class PrestationAdminController extends AbstractController
 
         return $this->render('admin/prestation/new_from_rdv.html.twig', [
             'rdv' => $rdv,
-            'champs' => $champs
+            'champs' => $champs,
+            'medicaments' => $medicaments
         ]);
     }
 }

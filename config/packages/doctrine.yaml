@@ -27,6 +27,8 @@ doctrine:
             right_id: Infrastructure\Persistence\Doctrine\Type\RightIdType
             action_id: Infrastructure\Persistence\Doctrine\Type\ActionIdType
             history_id: Infrastructure\Persistence\Doctrine\Type\HistoryIdType
+            medicament_id: Infrastructure\Persistence\Doctrine\Type\MedicamentIdType
+            facture_id: Infrastructure\Persistence\Doctrine\Type\FactureIdType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -95,6 +97,18 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/user'
                 prefix: 'Domain\User\Entity'
                 alias: User
+            Medicament:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine/medicament'
+                prefix: 'Domain\Medicament\Entity'
+                alias: Medicament
+            Facture:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine/facture'
+                prefix: 'Domain\Facture\Entity'
+                alias: Facture
         controller_resolver:
             auto_mapping: false
 

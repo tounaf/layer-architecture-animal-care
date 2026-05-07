@@ -9,7 +9,8 @@ final class RealiserPrestationCommand
         public readonly string $serviceProposeId,
         public readonly \DateTimeInterface $dateRealisation,
         public readonly float $coutTotal,
-        public readonly array $valeursChamps = [] // format: ['champ_id' => 'valeur' | ['file' => File, 'description' => '...']]
+        public readonly array $valeursChamps = [], // format: ['champ_id' => 'valeur' | ['file' => File, 'description' => '...']]
+        public readonly array $prescriptions = [] // format: [['medicamentId' => '...', 'quantite' => 2]]
     ) {
     }
 }
