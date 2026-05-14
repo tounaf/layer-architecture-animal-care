@@ -36,10 +36,13 @@ class PrestationAdminController extends AbstractController
     }
 
     #[Route('', name: 'index')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $prestations = $this->repository->findAll();
-        $enhancedPrestations = [];
+        $searchTerm = $request->query->get('search', '');
+        $allEnhancedPrestations = [];
+        $totalCAAll = 0;
+        $completedCountAll = 0;
 
         foreach ($prestations as $prestation) {
             $rdv = $this->rendezVousRepository->findById($prestation->getRendezVousId());
@@ -63,16 +66,35 @@ class PrestationAdminController extends AbstractController
                 }
             }
 
-            $enhancedPrestations[] = [
+            $allEnhancedPrestations[] = [
                 'prestation' => $prestation,
                 'clientName' => $clientName,
                 'plageHoraire' => $plageHoraire,
                 'serviceName' => $serviceName
             ];
+
+            // Calculer les statistiques globales
+            $totalCAAll += $prestation->getCoutTotal();
+            if (strtolower($prestation->getStatut()) === 'realisee' || strtolower($prestation->getStatut()) === 'terminé') {
+                $completedCountAll++;
+            }
+        }
+
+        // Filtrer par recherche
+        $enhancedPrestations = $allEnhancedPrestations;
+        if (!empty($searchTerm)) {
+            $searchTermLower = strtolower($searchTerm);
+            $enhancedPrestations = array_filter($allEnhancedPrestations, function($item) use ($searchTermLower) {
+                return stripos($item['clientName'], $searchTermLower) !== false
+                    || stripos($item['serviceName'], $searchTermLower) !== false;
+            });
         }
 
         return $this->render('admin/prestation/index.html.twig', [
-            'enhancedPrestations' => $enhancedPrestations
+            'enhancedPrestations' => $enhancedPrestations,
+            'totalCA' => $totalCAAll,
+            'completedCount' => $completedCountAll,
+            'searchTerm' => $searchTerm
         ]);
     }
 

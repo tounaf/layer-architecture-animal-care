@@ -1,13 +1,23 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block title %}Prestations réalisées{% endblock %}
+{% block title %}Prestations Réalisées{% endblock %}
 
 {% block body %}
 <div class="page-header d-print-none">
     <div class="container-xl">
-        <div class="row g-2 align-items-center">
+        <div class="row g-3 align-items-center">
             <div class="col">
-                <h2 class="page-title">Prestations réalisées</h2>
+                <h2 class="page-title">Prestations Réalisées</h2>
+                <div class="text-secondary">
+                    {{ enhancedPrestations|length }} prestation{{ enhancedPrestations|length > 1 ? 's' : '' }} enregistrée{{ enhancedPrestations|length > 1 ? 's' : '' }}
+                </div>
+            </div>
+            <div class="col-auto ms-auto">
+                <div class="btn-list">
+                    <button type="button" class="btn btn-secondary" onclick="exportToExcel()">
+                        <i class="ti ti-download"></i> Exporter
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -15,41 +25,181 @@
 
 <div class="page-body">
     <div class="container-xl">
+
+        <!-- Statistiques rapides -->
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6 col-md-3">
+                <div class="card">
+                    <div class="card-body p-3">
+                        <div class="text-secondary">Chiffre d'affaires total</div>
+                        <h3 class="mb-0 text-primary">{{ totalCA|default(0)|number_format(0, ',', ' ') }} Ar</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="card">
+                    <div class="card-body p-3">
+                        <div class="text-secondary">Prestations terminées</div>
+                        <h3 class="mb-0 text-green">{{ completedCount|default(0) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
+            <div class="card-header">
+                <form method="GET" action="{{ path('admin_prestation_index') }}" class="d-flex gap-2">
+                    <div class="input-group w-350">
+                        <span class="input-group-text">
+                            <i class="ti ti-search"></i>
+                        </span>
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Rechercher un client ou un service..." 
+                               value="{{ searchTerm }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                    {% if searchTerm %}
+                        <a href="{{ path('admin_prestation_index') }}" class="btn btn-secondary">Réinitialiser</a>
+                    {% endif %}
+                </form>
+            </div>
+
             <div class="table-responsive">
-                <table class="table table-vcenter card-table">
+                <table class="table table-vcenter card-table table-hover" id="prestationsTable">
                     <thead>
                         <tr>
-                            <th>Date Réalisation</th>
+                            <th>Date & Heure</th>
                             <th>Client</th>
-                            <th>Rendez-vous (Plage)</th>
+                            <th>Plage Horaire</th>
                             <th>Service</th>
-                            <th>Coût Total</th>
+                            <th class="text-end">Coût Total</th>
                             <th>Statut</th>
-                            <th class="w-1"></th>
+                            <th class="w-1 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for item in enhancedPrestations %}
                             {% set prestation = item.prestation %}
                             <tr>
-                                <td>{{ prestation.dateRealisation|date('d/m/Y H:i') }}</td>
-                                <td>{{ item.clientName }}</td>
+                                <td>
+                                    <div class="font-medium">{{ prestation.dateRealisation|date('d/m/Y') }}</div>
+                                    <div class="text-secondary small">{{ prestation.dateRealisation|date('H:i') }}</div>
+                                </td>
+                                <td class="font-medium">{{ item.clientName }}</td>
                                 <td>{{ item.plageHoraire }}</td>
                                 <td>{{ item.serviceName }}</td>
-                                <td>{{ prestation.coutTotal }} Ar</td>
-                                <td><span class="badge bg-green">{{ prestation.statut }}</span></td>
+                                <td class="text-end fw-bold">
+                                    {{ prestation.coutTotal|number_format(0, ',', ' ') }} Ar
+                                </td>
                                 <td>
-                                    <a href="{{ path('admin_prestation_show', {id: prestation.id}) }}" class="btn btn-white btn-sm">Détail</a>
+                                    <span class="badge 
+                                        {% if prestation.statut == 'Terminé' %}bg-success
+                                        {% elseif prestation.statut == 'En cours' %}bg-warning
+                                        {% elseif prestation.statut == 'Annulé' %}bg-danger
+                                        {% elseif prestation.statut == 'realisee' %}bg-success
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ prestation.statut }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ path('admin_prestation_show', {id: prestation.id}) }}" 
+                                       class="btn btn-sm btn-white" title="Détail">
+                                        <i class="ti ti-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         {% else %}
-                            <tr><td colspan="7" class="text-center">Aucune prestation enregistrée</td></tr>
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-secondary">
+                                    <i class="ti ti-inbox" style="font-size: 42px;"></i>
+                                    <p class="mt-3 mb-0">Aucune prestation enregistrée pour le moment</p>
+                                </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination simple -->
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="text-secondary">
+                    Affichage de <strong>{{ enhancedPrestations|length }}</strong> résultat{{ enhancedPrestations|length > 1 ? 's' : '' }}
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-secondary" disabled>← Précédent</button>
+                    <button class="btn btn-sm btn-primary mx-2">1</button>
+                    <button class="btn btn-sm btn-secondary" disabled>Suivant →</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        /**
+         * Exporte les données du tableau en CSV
+         */
+        function exportToExcel() {
+            const table = document.getElementById("prestationsTable");
+            const tbody = table.getElementsByTagName("tbody")[0];
+            const rows = tbody.getElementsByTagName("tr");
+            
+            // En-têtes
+            const headers = ["Date", "Heure", "Client", "Plage Horaire", "Service", "Coût (Ar)", "Statut"];
+            
+            let csvContent = headers.map(h => `"${h}"`).join(",") + "\n";
+            
+            let totalCost = 0;
+            let rowCount = 0;
+
+            // Parcourir les lignes du tableau
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName("td");
+                
+                // Vérifier si c'est la ligne "Aucune prestation"
+                if (cells[0].colSpan) continue;
+                
+                // Extraire les données
+                const dateDiv = cells[0].querySelector("div.font-medium");
+                const timeDiv = cells[0].querySelector("div.text-secondary");
+                const date = dateDiv ? dateDiv.textContent.trim() : "";
+                const time = timeDiv ? timeDiv.textContent.trim() : "";
+                const client = cells[1] ? cells[1].textContent.trim() : "";
+                const horaire = cells[2] ? cells[2].textContent.trim() : "";
+                const service = cells[3] ? cells[3].textContent.trim() : "";
+                const costText = cells[4] ? cells[4].textContent.trim() : "0";
+                const statusSpan = cells[5].querySelector("span.badge");
+                const status = statusSpan ? statusSpan.textContent.trim() : "";
+                
+                // Parser le coût (format: "X XXX Ar")
+                const costValue = parseFloat(costText.replace(/\s/g, '').replace('Ar', '').replace(',', '.')) || 0;
+                
+                // Ajouter la ligne au CSV
+                csvContent += `"${date}","${time}","${client}","${horaire}","${service}","${costText}","${status}"\n`;
+                
+                totalCost += costValue;
+                rowCount++;
+            }
+            
+            // Ajouter une ligne de total
+            if (rowCount > 0) {
+                const formattedTotal = totalCost.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' Ar';
+                csvContent += "\n,,,,," + `"Total: ${formattedTotal}"` + ",\n";
+            }
+            
+            // Créer un blob et télécharger
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `prestations_${new Date().toISOString().split('T')[0]}.csv`);
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
 {% endblock %}

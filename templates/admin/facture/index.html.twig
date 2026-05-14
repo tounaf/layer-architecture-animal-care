@@ -38,9 +38,9 @@
                                 <td><strong>{{ facture.numeroFacture }}</strong></td>
                                 <td>{{ facture.createdAt|date('d/m/Y H:i') }}</td>
                                 <td>{{ item.clientName }}</td>
-                                <td>{{ facture.montantHT|number_format(2, ',', ' ') }} EUR</td>
-                                <td>{{ facture.tva|number_format(2, ',', ' ') }} EUR</td>
-                                <td><strong>{{ facture.montantTTC|number_format(2, ',', ' ') }} EUR</strong></td>
+                                <td>{{ facture.montantHT|number_format(2, ',', ' ') }} Ar</td>
+                                <td>{{ facture.tva|number_format(2, ',', ' ') }} Ar</td>
+                                <td><strong>{{ facture.montantTTC|number_format(2, ',', ' ') }} Ar</strong></td>
                                 <td>
                                     <span class="badge {{ facture.statut.value == 'payee' ? 'bg-success' : 'bg-warning' }}">
                                         {{ facture.statut.value|replace({'_': ' '})|capitalize }}
