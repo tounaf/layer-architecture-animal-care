@@ -11,4 +11,6 @@ interface PrestationRepositoryInterface
     public function findById(PrestationId $id): ?Prestation;
     /** @return Prestation[] */
     public function findAll(): array;
+    /** @return Prestation[] */
+    public function searchByClientOrService(string $searchTerm): array;
 }

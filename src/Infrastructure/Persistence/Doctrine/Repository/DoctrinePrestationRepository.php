@@ -29,4 +29,12 @@ final class DoctrinePrestationRepository implements PrestationRepositoryInterfac
     {
         return $this->entityManager->getRepository(Prestation::class)->findAll();
     }
+
+    public function searchByClientOrService(string $searchTerm): array
+    {
+        $repository = $this->entityManager->getRepository(Prestation::class);
+        // Retourner tous les prestations pour maintenant, sera enrichie au controller
+        // La vraie recherche se fait au niveau du contrôleur après enrichissement avec les données client/service
+        return $repository->findAll();
+    }
 }
