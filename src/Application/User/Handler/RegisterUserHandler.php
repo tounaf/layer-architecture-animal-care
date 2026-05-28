@@ -33,7 +33,8 @@ final class RegisterUserHandler
             $command->lastname,
             $command->firstname,
             $command->mail,
-            '' // Password temporaire
+            '',
+            $command->isActive
         );
 
         // On hashe le mot de passe

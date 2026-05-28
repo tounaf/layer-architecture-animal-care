@@ -51,3 +51,45 @@ L'accès est vérifié via les codes de Droits. Un utilisateur possède l'union 
 2. Les droits de ses profils directs.
 3. Les droits de ses groupes.
 4. Les droits des profils de ses groupes.
+
+## Création d'utilisateur en ligne de commande
+
+```bash
+php bin/console app:user:create LOGIN NOM PRENOM EMAIL MOT_DE_PASSE
+```
+
+Exemple admin (droit `admin` créé par les fixtures) :
+
+```bash
+php bin/console app:user:create admin2 Admin System admin2@example.com MonMotDePasse --right-code=admin
+```
+
+Options utiles :
+- `--inactive` : utilisateur désactivé
+- `--group-id=...` (répétable)
+- `--profile-id=...` (répétable)
+- `--right-id=...` (répétable)
+- `--right-code=admin` (répétable)
+
+## API REST — création d'utilisateur
+
+- **URL** : `POST /api/users`
+- **Content-Type** : `application/json`
+
+Payload minimal :
+
+```json
+{
+  "login": "nouvel_admin",
+  "lastname": "Rakoto",
+  "firstname": "Jean",
+  "mail": "jean.rakoto@example.com",
+  "password": "MotDePasseSecurise123",
+  "is_active": true,
+  "right_codes": ["admin"]
+}
+```
+
+Champs optionnels : `group_ids`, `profile_ids`, `right_ids`.
+
+Un script d'exemple est disponible : `exemple-api-user.php`.
